@@ -1,15 +1,20 @@
 import { useState } from 'react';
-import './App.css'
+import LoginPage from './login';
+import { 
+  BrowserRouter as Router, Route, Routes 
+} from 'react-router-dom';
+
 
 function App() {
   
   return (
     <>
-      <h1>Number: {counter}</h1>
-      <button onClick={()=>Adding()}>Click Me</button>
-      <button onClick={()=>Subtract()}>subtract Me</button>
-      <button onClick={()=>Reset()}>reset Me to zeroo</button>
-      <button>test</button>
+      <Router>
+        <Routes>
+          <Route path="skibidi" element={<LoginPage />}/>
+
+        </Routes>
+      </Router>
 
     </>
   )
