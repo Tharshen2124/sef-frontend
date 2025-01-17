@@ -12,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<MainPage />} />
+          <Route path="/publicuser/hawkers" element={<HawkerCard />} />
         </Routes>
       </Router>
 
