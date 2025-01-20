@@ -9,6 +9,7 @@ import FeedbackPage from './pages/PublicUsers/Feedback';
 import HawkerApplicationReviewPage from './pages/Admin/HawkerApplicationReviewPage';
 import ManageUserAccountPage from './pages/Admin/ManageUserAccountPage';
 import HLMHawkerApplicationPage from './pages/HLM/HLMHawkerApplicationPage';
+import HLMDashboardPage from './pages/HLM/HLMDashboardPage';
 import FeedbackMoreInfoPage from './pages/PublicUsers/FeedbackMoreInfoPage';
 import SubmitFeedbackFormPage from './pages/PublicUsers/SubmitFeedbackFormPage';
 import ApplicationSubmissionStatusPage from './pages/Hawkers/ApplicationSubmissionStatusPage';
@@ -44,7 +45,7 @@ function App() {
 
           {/* Hawker License Manager routes */}
           <Route path="/hlm/hawker-applications" element={<HLMHawkerApplicationPage />} />
-        
+          <Route path="/hlm/hawker-dashboard" element={<HLMDashboardPage/>} />
         </Routes>
       </Router>
 
