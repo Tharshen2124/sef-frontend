@@ -1,0 +1,51 @@
+.accountSelection
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    width: 100%; 
+}
+
+.accountbuttons{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.accountbuttons p{
+    font-size: 24px;
+    color: #3662E3;
+}
+.accountSelection h1{
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    padding-bottom: 25px;
+    font-weight: 500;
+}
+
+.userButton, .hawkerButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid #DEE9FC;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 250px;
+    background: white;
+    transition: all 0.2s ease;
+    gap:30px
+}
+
+img{
+    width: 95px;
+    height: 103px;
+}
+
+.hawkerButton img{
+    width: 140px;
+    height: 103px;
+}
