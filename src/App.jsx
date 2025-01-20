@@ -12,6 +12,7 @@ import HLMHawkerApplicationPage from './pages/HLM/HLMHawkerApplicationPage';
 import FeedbackMoreInfoPage from './pages/PublicUsers/FeedbackMoreInfoPage';
 import SubmitFeedbackFormPage from './pages/PublicUsers/SubmitFeedbackFormPage';
 import ApplicationSubmissionStatusPage from './pages/Hawkers/ApplicationSubmissionStatusPage';
+import AccountSelection from './pages/accountSelection';
 
 function App() {
   
@@ -22,6 +23,10 @@ function App() {
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<MainPage />} />
           
+          <Route path="/accountSelection" element={<AccountSelection />} />
+
+
+
           {/* Public User routes */}
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
           <Route path="/publicuser/hawkers/1" element={<HawkerMoreInfoPage/>} />
