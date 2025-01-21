@@ -1,0 +1,11 @@
+<svg width="122" height="146" viewBox="0 0 122 146" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="46.5" cy="22.5" r="22.5" fill="#3662E3"/>
+<path d="M0 80C0 66.1929 11.1929 55 25 55H70C83.8071 55 95 66.1929 95 80V103H0V80Z" fill="#3662E3"/>
+<rect x="56.5" y="69.5" width="63.0943" height="74.8444" rx="8.5" fill="#3662E3" stroke="white" stroke-width="3"/>
+<rect x="68.5859" y="83.0548" width="38.9222" height="2.20314" rx="1.10157" fill="white" stroke="white" stroke-width="2.20314"/>
+<rect x="68.5859" y="97.7424" width="38.9222" height="2.20314" rx="1.10157" fill="white" stroke="white" stroke-width="2.20314"/>
+<rect x="68.5859" y="112.43" width="38.9222" height="2.20314" rx="1.10157" fill="white" stroke="white" stroke-width="2.20314"/>
+<rect x="68.5859" y="127.118" width="22.0314" height="2.20314" rx="1.10157" fill="white" stroke="white" stroke-width="2.20314"/>
+<circle cx="107.875" cy="126.751" r="5.10943" fill="white" stroke="white" stroke-width="3"/>
+<path d="M103.773 137.368L107.875 131.555L111.977 137.368H103.773ZM108.283 130.977L108.284 130.976L107.875 130.688L108.284 130.976C108.283 130.977 108.283 130.977 108.283 130.977Z" fill="white" stroke="white" stroke-width="3"/>
+</svg>
