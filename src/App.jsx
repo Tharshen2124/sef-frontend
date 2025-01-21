@@ -14,6 +14,10 @@ import FeedbackMoreInfoPage from './pages/PublicUsers/FeedbackMoreInfoPage';
 import SubmitFeedbackFormPage from './pages/PublicUsers/SubmitFeedbackFormPage';
 import ApplicationSubmissionStatusPage from './pages/Hawkers/ApplicationSubmissionStatusPage';
 import AccountSelection from './pages/accountSelection';
+import HawkerFeedbackPage from './pages/Hawkers/HawkerFeedbackPage';
+import RenewLicensePage from './pages/Hawkers/RenewLicensePage';
+import HawkerProfilePage from './pages/Hawkers/HawkerProfilePage';
+import HLMInspectionReportPage from './pages/HLM/HLMInspectionReportPage';
 
 function App() {
   
@@ -23,11 +27,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<MainPage />} />
-          
           <Route path="/accountSelection" element={<AccountSelection />} />
-
-
-
+          
           {/* Public User routes */}
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
           <Route path="/publicuser/hawkers/1" element={<HawkerMoreInfoPage/>} />
@@ -37,7 +38,9 @@ function App() {
 
           {/* Hawker routes */}
           <Route path="/hawker/application-submissions-status" element={<ApplicationSubmissionStatusPage />} />
-
+          <Route path="/hawker/feedback" element={<HawkerFeedbackPage />} />
+          <Route path="/hawker/renew-license" element={<RenewLicensePage />} />
+          <Route path="/hawker/profile" element={<HawkerProfilePage />} />
 
           {/* System Admin routes */}
           <Route path="/admin/hawker-applications" element={<HawkerApplicationReviewPage />}/>
@@ -46,6 +49,7 @@ function App() {
           {/* Hawker License Manager routes */}
           <Route path="/hlm/hawker-applications" element={<HLMHawkerApplicationPage />} />
           <Route path="/hlm/hawker-dashboard" element={<HLMDashboardPage/>} />
+          <Route path="/hlm/inspection-reports" element={<HLMInspectionReportPage />} />
         </Routes>
       </Router>
 
