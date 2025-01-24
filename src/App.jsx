@@ -20,6 +20,7 @@ import HawkerProfilePage from './pages/Hawkers/HawkerProfilePage';
 import HLMInspectionReportPage from './pages/HLM/HLMInspectionReportPage';
 import HawkerDashboardPage from './pages/Hawkers/HawkerDashboardPage';
 import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
+import PublicUserSignUpPage from './pages/PublicUsers/PublicUserSignUpPage';
 
 function App() {
   
@@ -32,6 +33,7 @@ function App() {
           <Route path="/accountSelection" element={<AccountSelection />} />
           
           {/* Public User routes */}
+          <Route path="/publicuser/signup" element={<PublicUserSignUpPage />} />
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
           <Route path="/publicuser/hawkers/1" element={<HawkerMoreInfoPage/>} />
           <Route path="/publicuser/feedback" element={<FeedbackPage/>} />
