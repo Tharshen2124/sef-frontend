@@ -1,5 +1,5 @@
 import { CirclePlus } from "lucide-react";
-import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
+import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 
 export default function HLMInspectionReportPage() {
     const applications = [
