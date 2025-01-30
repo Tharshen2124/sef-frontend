@@ -1,0 +1,60 @@
+.hlmDashboardPage
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    width: 100%; 
+    padding: 100px;
+}
+
+.hlmDashboardPage h1{
+    color: black;
+    font-size: 24px;
+    padding-bottom: 30px;
+    font-weight: 700;
+    width: auto;
+    text-align: center;
+}
+
+.hlmDPbuttons{
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+.hlmDPbuttons p{
+    font-size: 18px;
+    color: #3662E3;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.hawkerApplicationsbutton, .inspectionsReportsbutton, .manageHawkerAccountsbutton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 70px;
+    border: 1px solid #DEE9FC;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 300px;
+    height: 500px;
+    background: white;
+    transition: all 0.2s ease;
+    width: 280px;
+}
+
+
+.hawkerApplicationsbutton img, .inspectionsReportsbutton img, .manageHawkerAccountsbutton img{
+    width: 145px;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
