@@ -1,4 +1,4 @@
-import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
+import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 import { BlueFileInput } from "../../components/General/BlueFileInput";
 
 export default function EditHawkerDetailsPage() {
