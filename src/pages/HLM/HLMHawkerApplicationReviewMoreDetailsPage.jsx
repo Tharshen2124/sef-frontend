@@ -3,7 +3,7 @@ import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 export default function HLMHawkerApplicationReviewMoreDetailsPage() {
   return (
     <>
-    <AdminNavigationBar />
+    <HLMNavigationBar />
     <section className="p-10">
             <div className="mb-5 text-[12px]">
                 <a href="" className="text-blue-600 hover:underline">Hawker Application</a>

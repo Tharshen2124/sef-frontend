@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.linktopleft{
+    padding: 16px;
+    margin-left: 16px;
+}
+
+.pathway2{
+    color: #3662E3;
+    margin: 0 8px;
+}
+
+.issuePenaltyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.issuePenaltyForm {
+    background: white;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 480px;
+    max-width: 600px;
+    margin-bottom: 400px;
+}
+
+.issuePenaltyForm h1, h3{
+    text-align: center;
+}
+
+.issuePenaltyContainer h1 {
+    font-weight: bold;
+    font-size: 24px;
+    color: #000;
+    margin: 0 0 8px 0;
+}
+
+.issuePenaltyForm h3 {
+    font-size: 16px;
+    color: #6b7280;
+    font-weight: normal;
+    margin: 0 0 24px 0;
+}
+
+.violationtype,
+.penaltyAmount,
+.penaltydocument {
+    margin-bottom: 24px;
+}
+
+.violationtype label,
+.penaltyAmount label,
+.penaltydocument label {
+    display: block;
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.violationtype input,
+.penaltyAmount input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #111827;
+    background-color: white;
+}
+
+.upload-area {
+    border: 1px solid #3B82F6;
+    padding: 15px; 
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column; 
+}
+  
+.upload-area.drag-active {
+    background-color: #3e6485;
+}
+  
+.hidden-input {
+    display: none;
+}
+  
+.upload-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+} 
+
+.upload-content img{
+    width: 30px; 
+    height: 30px; 
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+  
+.upload-text {
+    font-size: 14px;
+    color:  #3662E3;
+}
+  
+.choose-file {
+    font-weight: bold;
+    cursor: pointer;
+    color: #3662E3; /* Blue color for the "Choose a file" text */
+    font-size: 14px; /* Smaller font size */
+}
+  
+.submit {
+    width: 100%;
+    padding: 10px;
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+  
+.submit:hover {
+    background-color: #2563EB;
+}
+
+.hidden-input {
+    display: none; 
+}
