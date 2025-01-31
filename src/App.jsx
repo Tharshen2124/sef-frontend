@@ -77,7 +77,7 @@ function App() {
           <Route path="/hlm/manage-hawker-accounts" element={<ManageHawkerAccountPage/>} />
           <Route path="/hlm/hawker-applications/1" element={<HLMHawkerApplicationReviewMoreDetailsPage />} />
           <Route path="/hlm/inspection-reports/1" element={<HLMInspectionReportMoreDetailsPage />} />
-          <Route path="/hlm/manage-hawker-accounts/1" element={<HLMHawkerMoreDetailsPage />} />        
+          <Route path="/hlm/manage-hawker-accounts/1" element={<HLMHawkerMoreDetailsPage />} />       
         </Routes>
       </Router>
 
