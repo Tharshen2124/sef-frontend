@@ -32,6 +32,7 @@ import HLMHawkerApplicationReviewMoreDetailsPage from './pages/HLM/HLMHawkerAppl
 import HLMInspectionReportMoreDetailsPage from './pages/HLM/HLMInspectionReportMoreDetailsPage';
 import HLMHawkerMoreDetailsPage from './pages/HLM/HLMHawkerMoreDetailsPage';
 import AdminUserMoreDetailsPage from './pages/Admin/AdminUserMoreDetailsPage';
+import HLMApplicationReviewMoreInfoPage from './pages/HLM/HLMApplicationReviewMoreInfoPage';
 
 function App() {
   
@@ -77,7 +78,8 @@ function App() {
           <Route path="/hlm/manage-hawker-accounts" element={<ManageHawkerAccountPage/>} />
           <Route path="/hlm/hawker-applications/1" element={<HLMHawkerApplicationReviewMoreDetailsPage />} />
           <Route path="/hlm/inspection-reports/1" element={<HLMInspectionReportMoreDetailsPage />} />
-          <Route path="/hlm/manage-hawker-accounts/1" element={<HLMHawkerMoreDetailsPage />} />        
+          <Route path="/hlm/manage-hawker-accounts/1" element={<HLMHawkerMoreDetailsPage />} /> 
+          <Route path="/hlm/application-review/more-info-page" element={<HLMApplicationReviewMoreInfoPage />} />      
         </Routes>
       </Router>
 
