@@ -9,7 +9,7 @@ export default function HawkerNavigationBar() {
                     <ul className="hover:text-blue-500"><a href="">Dashboard</a></ul>
                     <ul className="hover:text-blue-500"><a href="">Profile</a></ul>
                     <ul className="hover:text-blue-500"><a href="">Feedback</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Penalties</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hawker/view-penalty">Penalties</a></ul>
                 </li>
             </div>
             <div className="flex items-center gap-x-4">
