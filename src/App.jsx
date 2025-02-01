@@ -48,10 +48,10 @@ function App() {
           {/* Public User routes */}
           <Route path="/publicuser/signup" element={<PublicUserSignUpPage />} />
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
-          <Route path="/publicuser/hawkers/1" element={<HawkerMoreInfoPage/>} />
+          <Route path="/publicuser/hawkers/:hawkerID" element={<HawkerMoreInfoPage/>} />
           <Route path="/publicuser/feedback" element={<FeedbackPage/>} />
           <Route path="/publicuser/feedback/submit-feedback" element={<SubmitFeedbackFormPage />} />
-          <Route path="/publicuser/feedback/1" element={<FeedbackMoreInfoPage />} />
+          <Route path="/publicuser/feedback/:feedbackID" element={<FeedbackMoreInfoPage />} />
 
           {/* Hawker routes */}
           <Route path="/hawker/profile/edit" element={<EditProfilePage />} />

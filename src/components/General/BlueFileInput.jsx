@@ -34,7 +34,6 @@ export function BlueFileInput({ onChange }) {
       {fileName ? (
         <div className="text-blue-600 text-center px-4">
           <p className="font-medium text-sm">{fileName}</p>
-          <p className="text-xs text-blue-500 mt-0.5">Click to change file</p>
         </div>
       ) : (
         <div className="text-blue-600 text-center flex items-center">

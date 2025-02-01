@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HawkerCard from '../../components/PublicUsers/HawkerCard'
 import NavigationBar from '../../components/PublicUsers/NavigationBar'
+import useAuthStore from '../../store/useAuthStore';
 
 export default function HawkerPage() {
+    const { id, userType } = useAuthStore(); 
+    const [shouldRedirect, setShouldRedirect] = useState(false);
+  
+    useEffect(() => {
+        if (userType !== 'publicuser') {
+            setShouldRedirect(true);
+        }
+    }, [id, userType]);  
+  
+    if (shouldRedirect) {
+        return <Navigate to="/" replace />;
+    } 
+  
   return (
     <>
         <NavigationBar/>

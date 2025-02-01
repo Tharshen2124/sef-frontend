@@ -6,9 +6,9 @@ export default function AdminNavigationBar() {
             <img src={HawkTuahLogo} width="148px" alt="" />
             <div className="flex items-center">
                 <li className="flex gap-x-8 transition ">
-                    <ul className="hover:text-blue-500"><a href="">Dashboard</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Manage Accounts</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">License Application</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/admin/dashboard">Dashboard</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/admin/manage-user-accounts">Manage Accounts</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/admin/hawker-applications">License Application</a></ul>
                 </li>
             </div>
             <div className="flex items-center gap-x-4">

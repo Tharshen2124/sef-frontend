@@ -1,64 +1,117 @@
-import React from 'react'
-import NavigationBar from '../../components/PublicUsers/NavigationBar'
+import React, { useEffect, useState } from 'react';
+import NavigationBar from '../../components/PublicUsers/NavigationBar';
+import { supabase } from '../../utils/supabaseClient';
+import useAuthStore from '../../store/useAuthStore';
 
 export default function FeedbackPage() {
-  const feedbackItems = [
-    {
-      title: "User spamming in forum posts",
-      description: "The user named John Smith has been spamming in all forum posts",
-      hawkerName: "Hawker A",
-    },
-    {
-      title: "False News",
-      description: "The news article \"Pet Event at Cyberjaya\" is fake bruh",
-      hawkerName: "Hawker B",
-    },
-    {
-      title: "Bug in making Appointment",
-      description: "When im selecting the date for the appointment to be made, I cannot seem to select the dates at December for reason. Please take a look into this",
-      hawkerName: "Hawker C",
-    },
-    {
-      title: "John Doe",
-      description: "John@gmail.com",
-      hawkerName: "Hawker D",
-    },
-  ]
+    const { id, userType } = useAuthStore(); 
+    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const publicUserId = "3";
+    const [feedbackItems, setFeedbackItems] = useState(null); // Stores feedback data
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
 
-  return (
-    <>
-        <NavigationBar />
-        <div className="w-full p-10 mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Feedback</h1>
-        <table className="w-full">
-            <thead>
-            <tr className="text-left border-b border-[#999]">
-                <th className="py-2 w-[250px]">Title</th>
-                <th className="py-2 w-[600px] sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">Description</th>
-                <th className="py-2 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">Hawker Name</th>
-                <th className="py-2 w-[100px]"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {feedbackItems.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                <td className="py-4">{item.title}</td>
-                <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">{item.description}</td>
-                <td className="py-4 sm:pl-16 md:pl-24 xl:pl-48">{item.hawkerName}</td>
-                <td className="py-4">
-                    <a 
-                    href="#" 
-                    className="text-blue-600 hover:text-blue-800 underline"
-                    >
-                    More Details
-                    </a>
-                </td>
-                </tr>
-            ))}
-            </tbody>
-        </table>
-        </div>
-    </>
-  )
+    useEffect(() => {
+        if (userType !== 'publicuser') {
+            setShouldRedirect(true);
+        }
+    }, [id, userType]);  
+  
+    if (shouldRedirect) {
+        return <Navigate to="/" replace />;
+    } 
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                setLoading(true); // Start loading
+                const { data, error } = await supabase
+                    .from('Feedback')
+                    .select(`
+                        *, 
+                        Hawker(*)
+                    `)
+                    .eq('publicUserID', publicUserId);
+
+                if (error) {
+                    throw new Error(error.message); // Throw error for easier handling
+                }
+
+                if (data && data.length > 0) {
+                    setFeedbackItems(data); // Set feedback data
+                } else {
+                    setFeedbackItems([]); // Set to empty array if no feedback found
+                }
+            } catch (err) {
+                setError(err.message); // Capture error
+            } finally {
+                setLoading(false); // Stop loading
+            }
+        }
+
+        getData();
+    }, [publicUserId]);
+
+    return (
+        <>
+            <NavigationBar />
+            <div className="w-full p-10 mx-auto">
+                <h1 className="text-3xl font-bold mb-6">Feedback</h1>
+
+                {/* Show loading state */}
+                {loading && <p className="text-center text-gray-500">Loading feedback...</p>}
+
+                {/* Show error message */}
+                {error && (
+                    <p className="text-center text-red-600">
+                        Error fetching feedback: {error}
+                    </p>
+                )}
+
+                {/* Show no data message */}
+                {!loading && !error && feedbackItems?.length === 0 && (
+                    <p className="text-center text-gray-500">No feedback found.</p>
+                )}
+
+                {/* Render feedback table */}
+                {!loading && !error && feedbackItems?.length > 0 && (
+                    <table className="w-full">
+                        <thead>
+                            <tr className="text-left border-b border-[#999]">
+                                <th className="py-2 w-[250px]">Title</th>
+                                <th className="py-2 w-[600px] sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
+                                    Description
+                                </th>
+                                <th className="py-2 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
+                                    Hawker Name
+                                </th>
+                                <th className="py-2 w-[100px]"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {feedbackItems.map((item, index) => (
+                                <tr key={index} className="border-b border-gray-200">
+                                    <td className="py-4">{item.feedbackTitle}</td>
+                                    <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
+                                        {item.feedbackDescription}
+                                    </td>
+                                    <td className="py-4 sm:pl-16 md:pl-24 xl:pl-48">
+                                        {item.Hawker?.name || 'Unknown Hawker'}
+                                    </td>
+                                    <td className="py-4">
+                                        <a
+                                            href="#"
+                                            className="text-blue-600 hover:text-blue-800 underline"
+                                        >
+                                            More Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        </>
+    );
 }
-
