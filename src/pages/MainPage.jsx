@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NavigationBar } from "../components/NavigationBar";
-import { supabaseClient } from "../utils/supabaseClient";
 import { CheckCircle, MessageCircle, Zap, ChevronRight } from 'lucide-react'
 
 export default function MainPage() {

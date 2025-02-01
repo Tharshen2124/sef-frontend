@@ -1,7 +1,28 @@
 import { Clock, MapPin, Phone, Store, User, Utensils } from 'lucide-react'
 import HawkerNavigationBar from '../../components/Hawkers/HawkerNavigationBar'
+import useAuthStore from '../../store/useAuthStore';
+import { useEffect, useState } from 'react';
 
 export default function HawkerProfilePage() {
+  const { id, userType } = useAuthStore(); 
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+      if (userType !== 'hawker') {
+          setShouldRedirect(true);
+      }
+  }, [id, userType]);  
+
+  // useEffect(() => {
+  //   async function getData() {
+  //     const { data, error } = await supabase.from("Hawker")
+  //   }
+  // }, [])
+
+  if (shouldRedirect) {
+      return <Navigate to="/" replace />;
+  } 
+
     return (
         <>
             <HawkerNavigationBar />
@@ -26,9 +47,9 @@ export default function HawkerProfilePage() {
                         Hainiese Chicken Rice
                     </h1>
                 </div>
-                <button className="absolute text-[14px] bottom-10 right-10 bg-blue-600 text-white px-10 py-4 rounded-[50px] font-medium hover:bg-blue-700 transition-colors">
+                <a href="/hawker/profile/edit" className="absolute text-[14px] bottom-10 right-10 bg-blue-600 text-white px-10 py-4 rounded-[50px] font-medium hover:bg-blue-700 transition-colors">
                     Edit Profile
-                </button>
+                </a>
             </div>
 
         <div className="mx-auto p-6 md:p-8">

@@ -1,33 +1,67 @@
+import { useEffect, useState } from "react"
 import AdminNavigationBar from "../../components/Admin/AdminNavigationBar"
+import { supabase } from "../../utils/supabaseClient"
+import { useNavigate } from "react-router-dom"
 
 export default function HawkerApplicationReviewPage() {
-    const applications = [
-        {
-          name: "Hawker A",
-          contact: "010-667 3148",
-          foodType: "Yong Tau Foo",
-        },
-        {
-          name: "Hawker B", 
-          contact: "010-667 3148",
-          foodType: "Curry Laksa",
-        },
-        {
-          name: "Hawker C",
-          contact: "010-667 3148", 
-          foodType: "Tom Yam",
-        },
-        {
-          name: "Hawker D",
-          contact: "010-667 3148",
-          foodType: "Asian",
-        },
-        {
-          name: "Hawker E",
-          contact: "010-667 3148",
-          foodType: "Middle Eastern",
-        }
-      ]
+  const [applications, setApplications] = useState()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    async function getData() {
+      const { data, error } = await supabase.
+        from("LicenseApplication")
+        .select(`
+          licenseApplicationID,
+          Hawker:hawkerID (
+            hawkerID, mobilePhoneNumber,
+            BusinessInfo (businessName, foodType)
+          )
+        `)
+        .eq("isAdminApproved", "Under Review")
+      setApplications(data)
+    }
+
+    getData()
+  }, [])
+
+  async function handleAccept(licenseApplicationID) {
+    const { error } = await supabase
+      .from("LicenseApplication")
+      .update({
+        isAdminApproved: "Approved"
+      })
+      .eq("licenseApplicationID", licenseApplicationID)
+    
+    if (error) {
+      alert("Error occured")
+      console.log("error occured",  error.message)
+    } else {
+      alert("Succesfully updated status of license application")
+      console.log("Status for license application successfully updated")
+      navigate(0)
+    }
+  }
+
+  async function handleReject(licenseApplicationID) {
+    const { error } = await supabase
+    .from("LicenseApplication")
+    .update({
+      isAdminApproved: "Rejected"
+    })
+    .eq("licenseApplicationID", licenseApplicationID)
+  
+    if (error) {
+      alert("Error occured, there's a problem updating the status for the application.")
+      console.log("error occured",  error.message)
+    } else {
+      alert("Succesfully updated status of license application")
+      console.log("Status for license application successfully updated")
+      navigate(0)
+    }
+  }
+
+  console.log(applications)
   return (
     <>
         <AdminNavigationBar />
@@ -44,20 +78,20 @@ export default function HawkerApplicationReviewPage() {
             </tr>
             </thead>
             <tbody>
-            {applications.map((item, index) => (
+            {applications && applications.map((item, index) => (
                 <tr key={index} className="border-b border-[#e0e0e0]">
-                <td className="py-4">{item.name}</td>
-                <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">{item.contact}</td>
-                <td className="py-4 sm:pl-8 lg:pl-4">{item.foodType}</td>
+                <td className="py-4">{item.Hawker.BusinessInfo[0].businessName}</td>
+                <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">{item.Hawker.mobilePhoneNumber}</td>
+                <td className="py-4 sm:pl-8 lg:pl-4">{item.Hawker.BusinessInfo[0].foodType}</td>
                 <td className="py-4 flex gap-x-4 items-center">
                     <a 
-                    href="#" 
+                    href={`/admin/hawker-applications/${item.licenseApplicationID}`}
                     className="text-blue-600 hover:text-blue-800 underline w-[91px] mr-8"
                     >
                     More Details
                     </a>
-                    <button className="py-[10px] px-6 bg-green-500 text-white rounded-md">Accept</button>
-                    <button className="py-[10px] px-6 bg-red-500 text-white rounded-md">Reject</button>
+                    <button className="py-[10px] px-6 bg-green-500 text-white rounded-md" onClick={() => handleAccept(item.licenseApplicationID)}>Accept</button>
+                    <button className="py-[10px] px-6 bg-red-500 text-white rounded-md" onClick={() => handleReject(item.licenseApplicationID)}>Reject</button>
                 </td>
                 </tr>
             ))}
