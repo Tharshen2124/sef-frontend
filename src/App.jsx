@@ -33,6 +33,8 @@ import HLMInspectionReportMoreDetailsPage from './pages/HLM/HLMInspectionReportM
 import HLMHawkerMoreDetailsPage from './pages/HLM/HLMHawkerMoreDetailsPage';
 import AdminUserMoreDetailsPage from './pages/Admin/AdminUserMoreDetailsPage';
 import HLMApplicationReviewMoreInfoPage from './pages/HLM/HLMApplicationReviewMoreInfoPage';
+import HawkerFeedbackMoreInfoPage from './pages/Hawkers/HawkerFeedbackMoreInfoPage';
+import HawkerViewPenaltyPage from './pages/Hawkers/HawkerViewPenaltyPage';
 
 function App() {
   
@@ -61,6 +63,8 @@ function App() {
           <Route path="/hawker/renew-license" element={<RenewLicensePage />} />
           <Route path="/hawker/profile" element={<HawkerProfilePage />} />
           <Route path="/hawker/apply-license" element={<ApplyForLicensePage />} />
+          <Route path="/hawker/feedback-more-info" element={<HawkerFeedbackMoreInfoPage/>} />
+          <Route path="/hawker/view-penalty" element={<HawkerViewPenaltyPage/>} />
 
           {/* System Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
