@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
 const useAuthStore = create((set) => {
-  // 🔥 Read initial values from cookies (if they exist)
+  // Read initial values from cookies (if they exist)
   const storedId = Cookies.get('id') || '0';
   const storedUserType = Cookies.get('userType') || 'not-logged-in';
 
