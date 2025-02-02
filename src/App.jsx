@@ -32,9 +32,8 @@ import HLMHawkerApplicationReviewMoreDetailsPage from './pages/HLM/HLMHawkerAppl
 import HLMInspectionReportMoreDetailsPage from './pages/HLM/HLMInspectionReportMoreDetailsPage';
 import HLMHawkerMoreDetailsPage from './pages/HLM/HLMHawkerMoreDetailsPage';
 import AdminUserMoreDetailsPage from './pages/Admin/AdminUserMoreDetailsPage';
-import HLMApplicationReviewMoreInfoPage from './pages/HLM/HLMApplicationReviewMoreInfoPage';
-import HawkerFeedbackMoreInfoPage from './pages/Hawkers/HawkerFeedbackMoreInfoPage';
-import HawkerViewPenaltyPage from './pages/Hawkers/HawkerViewPenaltyPage';
+import HLMIssuePenaltyPage from './pages/HLM/HLMIssuePenaltyPage';
+import AddInspectionDetailsPage from './pages/HLM/AddInspectionDetailsPage';
 
 function App() {
   
@@ -63,27 +62,26 @@ function App() {
           <Route path="/hawker/renew-license" element={<RenewLicensePage />} />
           <Route path="/hawker/profile" element={<HawkerProfilePage />} />
           <Route path="/hawker/apply-license" element={<ApplyForLicensePage />} />
-          <Route path="/hawker/feedback-more-info" element={<HawkerFeedbackMoreInfoPage/>} />
-          <Route path="/hawker/view-penalty" element={<HawkerViewPenaltyPage/>} />
 
           {/* System Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/hawker-applications" element={<HawkerApplicationReviewPage />}/>
           <Route path="/admin/manage-user-accounts" element={<ManageUserAccountPage />} />
-          <Route path="/admin/users/edit" element={<EditUserDetailsPage />} />
-          <Route path="/admin/hawker-applications/1" element={<HawkerApplicationReviewMoreDetailsPage />} />
-          <Route path="/admin/manage-user-accounts/1" element={<AdminUserMoreDetailsPage />} />
+          <Route path="/admin/users/edit/:hawkerID" element={<EditUserDetailsPage />} />
+          <Route path="/admin/hawker-applications/:hawkerID" element={<HawkerApplicationReviewMoreDetailsPage />} />
+          <Route path="/admin/manage-user-accounts/:hawkerID" element={<AdminUserMoreDetailsPage />} />
 
           {/* Hawker License Manager routes */}
           <Route path="/hlm/hawker-applications" element={<HLMHawkerApplicationPage />} />
-          <Route path="/hlm/hawker-dashboard" element={<HLMDashboardPage/>} />
+          <Route path="/hlm/dashboard" element={<HLMDashboardPage/>} />
           <Route path="/hlm/inspection-reports" element={<HLMInspectionReportPage />} />
-          <Route path="/hlm/hawkers/edit" element={<EditHawkerDetailsPage />} />
+          <Route path="/hlm/hawkers/edit/:hawkerID" element={<EditHawkerDetailsPage />} />
           <Route path="/hlm/manage-hawker-accounts" element={<ManageHawkerAccountPage/>} />
-          <Route path="/hlm/hawker-applications/1" element={<HLMHawkerApplicationReviewMoreDetailsPage />} />
-          <Route path="/hlm/inspection-reports/1" element={<HLMInspectionReportMoreDetailsPage />} />
-          <Route path="/hlm/manage-hawker-accounts/1" element={<HLMHawkerMoreDetailsPage />} /> 
-          <Route path="/hlm/application-review/more-info-page" element={<HLMApplicationReviewMoreInfoPage />} />      
+          <Route path="/hlm/hawker-applications/:hawkerID" element={<HLMHawkerApplicationReviewMoreDetailsPage />} />
+          <Route path="/hlm/inspection-reports/:inspectionID" element={<HLMInspectionReportMoreDetailsPage />} />
+          <Route path="/hlm/manage-hawker-accounts/:hawkerID" element={<HLMHawkerMoreDetailsPage />} /> 
+          <Route path="/hlm/issue-penalty/:hawkerID" element={<HLMIssuePenaltyPage />} />
+          <Route path="/hlm/inspection-reports/add/:hawkerID" element={<AddInspectionDetailsPage />} />
         </Routes>
       </Router>
 

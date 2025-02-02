@@ -72,8 +72,8 @@ export default function HawkerApplicationReviewPage() {
             <thead>
             <tr className="text-left border-b border-[#999]">
                 <th className="py-2 w-[250px]">Hawker Name</th>
-                <th className="py-2 w-[600px] sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">Contact Number</th>
-                <th className="py-2 sm:pl-8 lg:pl-4">Food Type</th>
+                <th className="py-2 w-[600px] sm:pl-16 md:pl-24">Contact Number</th>
+                <th className="py-2 ">Food Type</th>
                 <th className="py-2 w-[100px]"></th>
             </tr>
             </thead>
@@ -81,8 +81,8 @@ export default function HawkerApplicationReviewPage() {
             {applications && applications.map((item, index) => (
                 <tr key={index} className="border-b border-[#e0e0e0]">
                 <td className="py-4">{item.Hawker.BusinessInfo[0].businessName}</td>
-                <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">{item.Hawker.mobilePhoneNumber}</td>
-                <td className="py-4 sm:pl-8 lg:pl-4">{item.Hawker.BusinessInfo[0].foodType}</td>
+                <td className="py-6 sm:pl-16 md:pl-24">{item.Hawker.mobilePhoneNumber}</td>
+                <td className="py-4 ">{item.Hawker.BusinessInfo[0].foodType}</td>
                 <td className="py-4 flex gap-x-4 items-center">
                     <a 
                     href={`/admin/hawker-applications/${item.licenseApplicationID}`}

@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; 
+    height: 100%;
     width: 100%; 
     padding: 100px;
 }
@@ -43,13 +43,17 @@
     border: 1px solid #DEE9FC;
     border-radius: 10px;
     cursor: pointer;
-    width: 300px;
-    height: 500px;
+    width: 350px;
+    height: 380px;
     background: white;
     transition: all 0.2s ease;
-    width: 280px;
 }
 
+.hawkerApplicationsbutton:hover, .inspectionsReportsbutton:hover, .manageHawkerAccountsbutton:hover {
+    outline: 1px solid rgb(0, 64, 238);
+    border: 1px solid rgb(0, 64, 238);
+    text-decoration: none;
+}
 
 .hawkerApplicationsbutton img, .inspectionsReportsbutton img, .manageHawkerAccountsbutton img{
     width: 145px;

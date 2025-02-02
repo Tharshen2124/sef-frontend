@@ -14,20 +14,20 @@ const HLMDashboardPage = () => {
       <h1>Dashboard</h1>
 
       <div className="hlmDPbuttons">
-          <button className="hawkerApplicationsbutton">
+          <a href="/hlm/hawker-applications" className="hawkerApplicationsbutton">
               <img src={hawkerApplications} alt="test" />
                 <p>Hawker Application</p>
-          </button>            
+          </a>            
 
-          <button className="inspectionsReportsbutton">
+          <a href="/hlm/inspection-reports" className="inspectionsReportsbutton">
             <img src={inspectionReports} alt="test" />
               <p>Inspections Reports</p>
-          </button>
+          </a>
 
-          <button className="manageHawkerAccountsbutton">
+          <a href="/hlm/manage-hawker-accounts" className="manageHawkerAccountsbutton">
             <img src={manageHawkerAccounts} alt="test" />
               <p>Manage Hawker Accounts</p>
-          </button>
+          </a>
       </div>
       </div>
     </div>
