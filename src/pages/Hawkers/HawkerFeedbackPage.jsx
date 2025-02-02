@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import NavigationBar from '../../components/PublicUsers/NavigationBar'
+import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import useAuthStore from '../../store/useAuthStore';
 
 export default function HawkerFeedbackPage() {

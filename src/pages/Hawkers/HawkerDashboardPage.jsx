@@ -1,4 +1,5 @@
-import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
+
+import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import Feedback from "../../assets/Feedback.svg"
 import License from "../../assets/License.svg"
 import Penalties from "../../assets/Penalties.svg"
@@ -24,7 +25,7 @@ export default function HawkerDashboardPage() {
    
   return (
     <>
-        <AdminNavigationBar />
+        <NavigationBar />
         <section className="p-10">
             <h1 className="text-[24px] font-bold text-center">Dashboard</h1>
             <div className="flex flex-wrap justify-center gap-4 mt-10 max-w-[1200px] mx-auto">
