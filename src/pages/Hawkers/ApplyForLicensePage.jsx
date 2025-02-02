@@ -1,10 +1,10 @@
-import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
+import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import { BlueFileInput } from "../../components/General/BlueFileInput";
 
 export default function ApplyForLicensePage() {
   return (
     <>
-        <AdminNavigationBar />
+        <NavigationBar />
         <section className="p-10">
             <div className="mb-5 text-[12px]">
                 <a href="" className="text-blue-600 hover:underline">Dashboard</a>

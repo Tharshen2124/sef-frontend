@@ -6,9 +6,9 @@ export default function HawkerNavigationBar() {
             <img src={HawkTuahLogo} width="148px" alt="" />
             <div className="flex items-center">
                 <li className="flex gap-x-8 transition ">
-                    <ul className="hover:text-blue-500"><a href="">Dashboard</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Profile</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Feedback</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hawker/dashboard">Dashboard</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hawker/profile">Profile</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hawker/feedback">Feedback</a></ul>
                     <ul className="hover:text-blue-500"><a href="/hawker/view-penalty">Penalties</a></ul>
                 </li>
             </div>

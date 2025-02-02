@@ -1,4 +1,4 @@
-import NavigationBar from '../../components/PublicUsers/NavigationBar'
+import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 
 export default function ApplicationSubmissionStatusPage() {
   const feedbackItems = [
