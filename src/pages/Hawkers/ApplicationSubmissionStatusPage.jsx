@@ -1,6 +1,22 @@
+
+import { useEffect, useState } from 'react';
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
+import useAuthStore from '../../store/useAuthStore';
 
 export default function ApplicationSubmissionStatusPage() {
+  const { id, userType } = useAuthStore(); 
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+      if (userType !== 'hawker') {
+          setShouldRedirect(true);
+      }
+  }, [id, userType]);  
+
+  if (shouldRedirect) {
+      return <Navigate to="/" replace />;
+  } 
+
   const feedbackItems = [
     {
       businessName: "User spamming in forum posts",
