@@ -43,7 +43,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<MainPage />} />
-          <Route path="/accountSelection" element={<AccountSelection />} />
+          <Route path="/account-selection" element={<AccountSelection />} />
           <Route path="/hawker-signup" element={<HawkerSignUpPage />}/>
 
           {/* Public User routes */}
