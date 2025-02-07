@@ -81,7 +81,7 @@ function App() {
           <Route path="/hlm/inspection-reports/:inspectionID" element={<HLMInspectionReportMoreDetailsPage />} />
           <Route path="/hlm/manage-hawker-accounts/:hawkerID" element={<HLMHawkerMoreDetailsPage />} /> 
           <Route path="/hlm/issue-penalty/:hawkerID" element={<HLMIssuePenaltyPage />} />
-          <Route path="/hlm/inspection-reports/add/:hawkerID" element={<AddInspectionDetailsPage />} />
+          <Route path="/hlm/inspection-reports/add/" element={<AddInspectionDetailsPage />} />
         </Routes>
       </Router>
 

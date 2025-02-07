@@ -1,34 +1,30 @@
 import { CirclePlus } from "lucide-react";
 import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
+import { useEffect, useState } from "react";
+import { supabase } from "../../utils/supabaseClient";
+import { formatTime } from "../../utils/time";
 
 export default function HLMInspectionReportPage() {
-    const applications = [
-        {
-          name: "Hawker A",
-          contact: "010-667 3148",
-          foodType: "Yong Tau Foo",
-        },
-        {
-          name: "Hawker B", 
-          contact: "010-667 3148",
-          foodType: "Curry Laksa",
-        },
-        {
-          name: "Hawker C",
-          contact: "010-667 3148", 
-          foodType: "Tom Yam",
-        },
-        {
-          name: "Hawker D",
-          contact: "010-667 3148",
-          foodType: "Asian",
-        },
-        {
-          name: "Hawker E",
-          contact: "010-667 3148",
-          foodType: "Middle Eastern",
-        }
-      ]
+  const [inspectionReports, setInspectionReports] = useState()
+
+  
+  useEffect(() => {
+    async function getData() {
+      const { data, error } = await supabase
+        .from("SiteInspection")
+        .select(`
+            *,
+            Hawker:hawkerID (
+                *,
+                BusinessInfo (*)
+            )
+        `)
+      setInspectionReports(data)
+      console.log(data)
+    }
+    getData()
+  }, [])
+
   return (
     <>
     <HLMNavigationBar />
@@ -40,10 +36,10 @@ export default function HLMInspectionReportPage() {
                 </div>
             <div className="flex justify-between mb-5 items-center">
             <h1 className="text-2xl font-bold">Inspection Reports</h1>
-                <button className="flex items-center py-3 px-5 bg-blue-600 rounded-lg text-white gap-x-[6px]">
+                <a href="/hlm/inspection-reports/add" className="hover:no-underline hover:bg-blue-700 flex items-center py-3 px-5 bg-blue-600 rounded-lg text-white gap-x-[6px]">
                     <CirclePlus />
                     New Inspection
-                </button>
+                </a>
             </div>
             <div className="w-full mx-auto border rounded-lg border-[#e0e0e0] py-16 px-24">
             <table className="w-full">
@@ -56,14 +52,15 @@ export default function HLMInspectionReportPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {applications.map((item, index) => (
+
+                {inspectionReports && inspectionReports.map((item, index) => (
                     <tr key={index} className="border-b border-[#e0e0e0]">
-                    <td className="py-4">{item.name}</td>
-                    <td className="py-6 lg:pl-16">{item.contact}</td>
-                    <td className="py-4 ">{item.foodType}</td>
+                    <td className="py-4">{item.Hawker.BusinessInfo[0].businessName}</td>
+                    <td className="py-6 lg:pl-16">{item.Hawker.birthDate}</td>
+                    <td className="py-4 ">{formatTime(item.inspectionTime)}</td>
                     <td className="py-4 gap-x-4">
                         <a 
-                        href="#" 
+                        href={`/hlm/inspection-reports/${item.siteInspectionID}`}
                         className="text-blue-600 hover:text-blue-800 underline w-[91px] mr-8"
                         >
                         More Details

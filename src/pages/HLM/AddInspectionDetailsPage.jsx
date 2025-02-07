@@ -56,7 +56,7 @@ export default function AddInspectionDetailsPage() {
 
         const inspectionPhotoUrl = await uploadInspectionPhoto();
 
-        const { error } = await supabase.from('SiteInspection').insert({
+        const { error } = await supabase.from('SiteInspection').update({
             inspectionDate,
             inspectionTime,
             inspectionOutcome,

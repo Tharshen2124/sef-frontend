@@ -1,50 +1,43 @@
 import { useEffect, useState } from 'react';
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import useAuthStore from '../../store/useAuthStore';
+import { supabase } from '../../utils/supabaseClient';
 
 export default function HawkerFeedbackPage() {
   const { id, userType } = useAuthStore(); 
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
+  // SELECT * FROM FEEDBACK WHERE 
+
   useEffect(() => {
       if (userType !== 'hawker') {
           setShouldRedirect(true);
       }
+      
   }, [id, userType]);  
+
+  useEffect(() => {
+    async function getData() {
+      const { data, error } = await supabase
+        .from("User")
+        .select()
+
+      console.log(data)
+    }  
+
+    getData()
+  }, [])
 
   if (shouldRedirect) {
       return <Navigate to="/" replace />;
   } 
-
-  const feedbackItems = [
-    {
-      title: "User spamming in forum posts",
-      description: "The user named John Smith has been spamming in all forum posts",
-      hawkerName: "Hawker A",
-    },
-    {
-      title: "False News",
-      description: "The news article \"Pet Event at Cyberjaya\" is fake bruh",
-      hawkerName: "Hawker B",
-    },
-    {
-      title: "Bug in making Appointment",
-      description: "When im selecting the date for the appointment to be made, I cannot seem to select the dates at December for reason. Please take a look into this",
-      hawkerName: "Hawker C",
-    },
-    {
-      title: "John Doe",
-      description: "John@gmail.com",
-      hawkerName: "Hawker D",
-    },
-  ]
 
   return (
     <>
         <NavigationBar />
         <div className="w-full p-10 mx-auto">
         <h1 className="text-3xl font-bold mb-6">Feedback</h1>
-        <table className="w-full">
+        {/* <table className="w-full">
             <thead>
             <tr className="text-left border-b border-[#999]">
                 <th className="py-2 w-[250px]">Title</th>
@@ -70,7 +63,7 @@ export default function HawkerFeedbackPage() {
                 </tr>
             ))}
             </tbody>
-        </table>
+        </table> */}
         </div>
     </>
   )

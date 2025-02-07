@@ -6,10 +6,10 @@ export default function AdminNavigationBar() {
             <img src={HawkTuahLogo} width="148px" alt="" />
             <div className="flex items-center">
                 <li className="flex gap-x-8 transition ">
-                    <ul className="hover:text-blue-500"><a href="">Dashboard</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Hawker Applications</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Inspections Reports</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Manage Accounts</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hlm/dashboard">Dashboard</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hlm/hawker-applications">Hawker Applications</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hlm/inspection-reports">Inspections Reports</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/hlm/manage-hawker-accounts">Manage Accounts</a></ul>
                 </li>
             </div>
             <div className="flex items-center gap-x-4">

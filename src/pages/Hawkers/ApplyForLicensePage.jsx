@@ -117,7 +117,7 @@ export default function ApplyForLicensePage() {
                 .from(bucket)
                 .getPublicUrl(uploadData.path);
 
-            if (urlError) throw urlError;
+            if (urlError) throw urlError
             if (!getData) throw new Error('No URL retrieved');
 
             return getData.publicUrl;
