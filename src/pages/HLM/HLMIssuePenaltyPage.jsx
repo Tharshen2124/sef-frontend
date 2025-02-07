@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from "../../utils/supabaseClient"; // Import Supabase
 import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
-import './HLmIssuePenaltyPage.css';
+import './HLMIssuePenaltyPage.css';
 import { BlueFileInput } from '../../components/General/BlueFileInput';
 import { useNavigate, useParams } from 'react-router-dom';
 
