@@ -1,7 +1,7 @@
 
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import Feedback from "../../assets/Feedback.svg"
-import License from "../../assets/License.svg"
+import License from "../../assets/licenseIcon.svg"
 import Penalties from "../../assets/Penalties.svg"
 import Profile from "../../assets/profile.svg"
 import appSubStatus from "../../assets/appSubStatus.svg"
