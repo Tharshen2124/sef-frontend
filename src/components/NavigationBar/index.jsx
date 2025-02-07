@@ -14,8 +14,8 @@ export function NavigationBar() {
 
                     </div>
                         <div className="nav-buttons">
-                            <button className="login-btn">Log In</button>
-                            <button className="signup-btn">Sign Up!</button>
+                            <a href="/login" style={{ textDecoration: "none", color: "black" }} className="login-btn">Log In</a>
+                            <a href="/account-selection" style={{ textDecoration: "none" }} className="signup-btn">Sign Up!</a>
                         </div>
                 </div>
             </nav>

@@ -3,35 +3,16 @@ import { NavigationBar } from "../components/NavigationBar";
 import { CheckCircle, MessageCircle, Zap, ChevronRight } from 'lucide-react'
 
 export default function MainPage() {
-    // const [users, setUsers] = useState()
-    
-    // useEffect(() => {
-    //     async function getUsers() {
-    //         try {
-    //             const response =  await supabaseClient.from("users").select()
-    //             setUsers(response)
-
-    //             console.log("Response", response)
-    //         } catch(error) {
-    //             console.log("error caught", error)
-    //         }
-           
-    //     }
-    //     getUsers()
-    // }, [])
-
     return (
         <>
             <NavigationBar />
-            {/* { users && [users].map((user, index) => (
-                <li key={index}>{user.username}</li>
-            ))} */}
+            
             <section className="bg-blue-600 text-white py-20">
                 <div className="px-4 flex flex-col md:flex-row items-center justify-around">
                     <div className="mb-10 md:mb-0 lg:w-[480px] md:w-[400px]">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center md:text-start">Welcome to Our Amazing Platform</h1>
                         <p className="text-xl mb-6 text-center md:text-start">Discover the power of our innovative solution and take your business to new heights.</p>
-                        <button className="bg-white text-blue-600 hover:bg-blue-100 flex rounded-md py-2 px-3 mx-auto md:mx-0">Get Started <ChevronRight className="ml-2" /></button>
+                        <a href="/account-selection" className="bg-white w-[170px] no-underline text-blue-600 hover:bg-blue-100 flex rounded-md py-3 px-3 mx-auto md:mx-0">Get Started <ChevronRight className="ml-2" /></a>
                     </div>
                     <div className="">
                         <img src="/heroImage.jpg" width={400} height={400} alt="Hero Image" className="rounded-lg shadow-lg" />
