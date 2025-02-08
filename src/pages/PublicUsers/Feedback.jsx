@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NavigationBar from '../../components/PublicUsers/NavigationBar';
 import { supabase } from '../../utils/supabaseClient';
 import useAuthStore from '../../store/useAuthStore';
+import { Navigate } from 'react-router-dom';
 
 export default function FeedbackPage() {
     const { id, userType } = useAuthStore(); 
