@@ -34,6 +34,7 @@ import HLMHawkerMoreDetailsPage from './pages/HLM/HLMHawkerMoreDetailsPage';
 import AdminUserMoreDetailsPage from './pages/Admin/AdminUserMoreDetailsPage';
 import HLMIssuePenaltyPage from './pages/HLM/HLMIssuePenaltyPage';
 import AddInspectionDetailsPage from './pages/HLM/AddInspectionDetailsPage';
+import HawkerViewPenaltyPage from './pages/Hawkers/HawkerViewPenaltyPage';
 
 function App() {
   
@@ -62,6 +63,7 @@ function App() {
           <Route path="/hawker/renew-license" element={<RenewLicensePage />} />
           <Route path="/hawker/profile" element={<HawkerProfilePage />} />
           <Route path="/hawker/apply-license" element={<ApplyForLicensePage />} />
+          <Route path="/hawker/view-penalty/:hawkerID" element={<HawkerViewPenaltyPage />} />
 
           {/* System Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
