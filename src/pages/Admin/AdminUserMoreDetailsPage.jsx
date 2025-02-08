@@ -3,6 +3,7 @@ import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import { getOperationHours } from "../../utils/getOperationHours";
+import { formatTime } from "../../utils/time";
 
 export default function AdminUserMoreDetailsPage() {
     const { hawkerID } = useParams()
@@ -136,7 +137,7 @@ export default function AdminUserMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Start Time:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].businessStartTime }</p>
+                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessStartTime) }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Contact Number:</label>
@@ -182,7 +183,7 @@ export default function AdminUserMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business End Time:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].businessEndTime }</p>
+                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessEndTime) }</p>
                     </div>
                 </div>
             </div>
