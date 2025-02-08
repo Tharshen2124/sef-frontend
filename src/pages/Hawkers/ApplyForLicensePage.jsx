@@ -182,6 +182,8 @@ export default function ApplyForLicensePage() {
                     paymentProof: paymentProofUrl,
                     foodHandlingCertificate: foodHandlingCertificateUrl,
                     typhoidInjectionCard: typhoidInjectionCardUrl,
+                    status: 'Under Review',
+                    isAdminApproved: 'Under Review',
                     hawkerID: hawkerId
                 })
             ]);
@@ -290,11 +292,22 @@ export default function ApplyForLicensePage() {
                             {/* File inputs */}
                             {[
                                 ['passportPhoto', 'Passport Photo'],
-                                ['paymentProof', 'Payment Proof (RM 1000)'],
+                                ['paymentProof', 'Payment Proof'],
                                 ['foodHandlingCertificate', 'Food Handling Certificate'],
                                 ['typhoidInjectionCard', 'Typhoid Injection Card']
                             ].map(([key, label]) => (
                                 <div key={key} className="flex flex-col mt-5">
+                                    
+                                    {key === 'paymentProof' && (
+                                        <div className="mb-3 border-2 border-yellow-500 bg-yellow-100 text-yellow-700 rounded-sm   py-2 px-4 ">
+                                            IMPORTANT NOTE, pay to:
+                                            <p><b>Bank Number</b>: 1231321312</p>
+                                            <p><b>Bank Name:</b> MayBank</p>
+                                            <p><b>Bank Holder Name:</b> George Washington</p>
+                                            <p><b>Amount:</b> RM 1000</p>
+                                        </div>
+                                    )}
+
                                     <label className="font-semibold">{label}:</label>
                                     <BlueFileInput
                                         onChange={(file) => handleFileChange(file, key)}
