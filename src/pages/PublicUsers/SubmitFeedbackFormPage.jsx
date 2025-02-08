@@ -65,8 +65,8 @@ export default function SubmitFeedbackFormPage() {
         if(image) console.log("Image:", data.publicUrl);
 
         const { postError } = await supabase.from('Feedback').insert({
-            publicUserID: 3, 
-            hawkerID: 2, 
+            publicUserID: 4, 
+            hawkerID: 13, 
             feedbackTitle: feedbackTitle, 
             feedbackDescription: feedbackDescription, 
             hawkerRating: hawkerRating, 

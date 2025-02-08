@@ -6,8 +6,8 @@ export default function NavigationBar() {
             <img src={HawkTuahLogo} width="148px" alt="" />
             <div className="flex items-center">
                 <li className="flex gap-x-8 transition ">
-                    <ul className="hover:text-blue-500"><a href="">Hawkers</a></ul>
-                    <ul className="hover:text-blue-500"><a href="">Feedbacks</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/publicuser/hawkers">Hawkers</a></ul>
+                    <ul className="hover:text-blue-500"><a href="/publicuser/feedback">Feedbacks</a></ul>
                 </li>
             </div>
             <div className="flex items-center gap-x-4">

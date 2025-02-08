@@ -14,12 +14,12 @@ const AccountSelection = () => {
             
             <div className="accountbuttons">
                 <button className="userButton">
-                    <img src={userPic} alt="testing" />
+                    <img className="account-icon" src={userPic} alt="testing" />
                     <p>Public User</p>
                 </button>
 
                 <button className="hawkerButton">
-                    <img src={hawkerPic} alt="testing" />
+                    <img className="account-icon" src={hawkerPic} alt="testing" />
                     <p>Hawker</p>
                 </button>
                 

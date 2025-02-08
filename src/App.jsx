@@ -51,7 +51,7 @@ function App() {
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
           <Route path="/publicuser/hawkers/:hawkerID" element={<HawkerMoreInfoPage/>} />
           <Route path="/publicuser/feedback" element={<FeedbackPage/>} />
-          <Route path="/publicuser/feedback/submit-feedback" element={<SubmitFeedbackFormPage />} />
+          <Route path="/publicuser/feedback/submit-feedback/:hawkerID" element={<SubmitFeedbackFormPage />} />
           <Route path="/publicuser/feedback/:feedbackID" element={<FeedbackMoreInfoPage />} />
 
           {/* Hawker routes */}

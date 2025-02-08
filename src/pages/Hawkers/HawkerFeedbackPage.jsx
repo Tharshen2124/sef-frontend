@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import useAuthStore from '../../store/useAuthStore';
 import { supabase } from '../../utils/supabaseClient';
+import { Navigate } from 'react-router-dom';
 
 export default function HawkerFeedbackPage() {
   const { id, userType } = useAuthStore(); 
