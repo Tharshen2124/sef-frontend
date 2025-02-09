@@ -7,8 +7,6 @@ import { Navigate } from 'react-router-dom';
 export default function HawkerFeedbackPage() {
   const { id, userType } = useAuthStore(); //get user's id and user type
   const [shouldRedirect, setShouldRedirect] = useState(false); //determine if user should be redirected
-
-  
   const [feedbackItems, setFeedbackItems] = useState([]); //get feedback
   const [loading, setLoading] = useState(true); //loading state
   const [error, setError] = useState(null); //error state

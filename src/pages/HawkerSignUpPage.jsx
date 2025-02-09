@@ -243,7 +243,7 @@ export default function HawkerSignUpPage() {
                     <div>
                         <div className="flex flex-col mt-5">
                             <label htmlFor="" className="font-semibold">Full Name:</label>
-                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="John Doe" onChange={(e) => setFullName(e.target.value)} />
+                            <input type="text"  className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="John Doe" onChange={(e) => setFullName(e.target.value)} />
                             {errors.fullName && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.fullName}</p>}
                         </div>
                         <div className="flex flex-col mt-5">

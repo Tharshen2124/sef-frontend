@@ -44,7 +44,7 @@ const PublicUserSignUpPage = () => {
 
         } catch (error) {
             console.log("bruh", error);
-            setErrors({ ...errors, form: error.message });
+            setErrors({ form: error.message });
         }
     }
 
@@ -56,14 +56,17 @@ const PublicUserSignUpPage = () => {
             newErrors.fullName = "Full name is required.";
         } else if (fullName.length < 3) {
             newErrors.fullName = "Full name must be at least 3 characters long.";
+        } else if (!/^[A-Za-z\s]+$/.test(fullName)) {
+            newErrors.fullName = "Full name can only contain letters and spaces.";
         }
 
-        // IC Number validation (must be exactly 12 digits)
+        // IC Number validation
         if (!icNumber) {
             newErrors.icNumber = "IC number is required.";
-        } else if (!/^\d{12}$/.test(icNumber)) {
-            newErrors.icNumber = "IC number must be exactly 12 digits.";
+        } else if (!/^\d{6}-\d{2}-\d{4}$/.test(icNumber)) {
+            newErrors.icNumber = "IC number must follow the format XXXXXX-XX-XXXX. No special characters (besides the dash) and letters.";
         }
+        
 
         // Email validation
         if (!email) {
@@ -137,7 +140,7 @@ const PublicUserSignUpPage = () => {
                             <input 
                                 type="text" 
                                 onChange={(e) => setFullName(e.target.value)} 
-                                onBlur={() => setErrors(validateForm())} 
+                                placeholder="John Doe"
                             />
                             {errors.fullName && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.fullName}</p>}
                         </div>
@@ -148,7 +151,6 @@ const PublicUserSignUpPage = () => {
                                 type="text" 
                                 placeholder="xxxxxx-xx-xxxx" 
                                 onChange={(e) => setIcNumber(e.target.value)} 
-                                onBlur={() => setErrors(validateForm())} 
                             />
                             {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
                         </div>
@@ -157,8 +159,8 @@ const PublicUserSignUpPage = () => {
                             <label>Email</label>
                             <input 
                                 type="email" 
+                                placeholder="john@gmail.com"
                                 onChange={(e) => setEmail(e.target.value)} 
-                                onBlur={() => setErrors(validateForm())} 
                             />
                             {errors.email && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.email}</p>}
                         </div>
@@ -168,14 +170,13 @@ const PublicUserSignUpPage = () => {
                             <input 
                                 type="password" 
                                 onChange={(e) => setPassword(e.target.value)} 
-                                onBlur={() => setErrors(validateForm())} 
                             />
                             {errors.password && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.password}</p>}
                         </div>
 
                         <p>Already have an account? <a href="/login">Login</a> here!</p>
 
-                        <input type="submit" className="submit" />
+                        <input type="submit" className="submit" /> 
                     </form>
                 </div>
             </div>
