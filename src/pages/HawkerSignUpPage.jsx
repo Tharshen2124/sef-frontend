@@ -143,7 +143,7 @@ export default function HawkerSignUpPage() {
         if (!mobilePhoneNumber) {
             newErrors.mobilePhoneNumber = "Mobile Phone Number is required.";
         } else if (!/^60\d{9,10}$/.test(mobilePhoneNumber)) {
-            newErrors.mobilePhoneNumber = "Invalid mobile phone number format. It should start with '60' followed by 8 or 9 digits.";
+            newErrors.mobilePhoneNumber = "Invalid mobile phone number format. It should start with '60' followed by 9 or 10 digits.";
         }
 
         if (!birthDate) {
