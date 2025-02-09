@@ -4,6 +4,7 @@ import HawkTuahLogo from "../../assets/hawkTuahLogo.svg";
 import { supabase } from '../../utils/supabaseClient';
 import { Navigate } from 'react-router-dom';
 import useAuthStore from '../../store/useAuthStore';
+import { hashPassword } from '../../utils/hashPassword';
 
 const PublicUserSignUpPage = () => {
     const [fullName, setFullName] = useState("");
@@ -91,9 +92,11 @@ const PublicUserSignUpPage = () => {
     }
 
     async function uploadUserData() {
+        const hashedPassword = await hashPassword(password);
+
         const { data: publicUserData, error } = await supabase
             .from('User')
-            .insert({ fullName, password, icNumber, email })
+            .insert({ fullName, password: hashedPassword, icNumber, email })
             .select()
             .single();
 

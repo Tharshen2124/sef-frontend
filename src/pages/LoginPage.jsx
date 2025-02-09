@@ -8,10 +8,16 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [icNumber, setIcNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { setId, setUserType } = useAuthStore.getState()
   const [userData, setUserData] = useState()
   const [userType, setUserTypeState] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [errors, setErrors] = useState({
+    icNumber: "",
+    password: "",
+    form: ""
+  });
 
   useEffect(() => {
     if (userData && userType) {
@@ -21,11 +27,20 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setIsSubmitting(true);
 
-    if (!icNumber || !password) {
-      setError("IC Number and Password are required");
-      return;
+    setErrors({
+      icNumber: "",
+      password: "",
+      form: ""
+    });
+
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.values(validationErrors).some(error => error !== "")) {
+        setIsSubmitting(false);
+        return; // Stop submission if there are errors
     }
 
     try {
@@ -37,37 +52,59 @@ export default function LoginPage() {
 
       if (error) {
         if (error.code === "PGRST116") {
-          setError("Data not found. Please check your IC Number.");
+          setErrors({ form: "User not found. Please check your IC Number." });
+          setIsSubmitting(false);
         } else {
           console.error("Unexpected error occurred:", error.message);
-          setError("An unexpected error occurred. Please try again later.");
+          setErrors({ form:"An unexpected error occurred. Please try again later." });
+          setIsSubmitting(false);
         }
         return;
       }
 
-      const result = await checkPassword(password, await hashPassword(user.password));
+      const result = await checkPassword(password, user.password);
 
       if (!result) {
-        setError("Invalid password. Please try again.");
+        setErrors({ form: "Invalid password. Please try again." });
+        setIsSubmitting(false);
         return;
       }
 
-      setError("");
-
       // Get user type without waiting for setUserData
       const userTypeFound = await getUserType(user.userId);
-
       if (!userTypeFound) {
-        setError("User type not found. Please contact support.");
+        setErrors({ form: "User type not found. Please contact support." });
+        setIsSubmitting(false);
         return;
       }
 
       setUserTypeState(userTypeFound);
     } catch (err) {
       console.error("Unexpected error:", err);
-      setError("Something went wrong. Please try again.");
+      setErrors({ form: "Something went wrong. Please try again." });
+      setIsSubmitting(false);
     }
   };
+
+  function validateForm() {
+    let newErrors = { icNumber: "", password: "" };
+
+    // IC Number validation
+    if (!icNumber) {
+        newErrors.icNumber = "IC number is required.";
+    } else if (!/^\d{6}-\d{2}-\d{4}$/.test(icNumber)) {
+        newErrors.icNumber = "IC number must follow the format XXXXXX-XX-XXXX. No special characters (besides the dash) and letters.";
+    }
+  
+    // Password validation
+    if (!password) {
+        newErrors.password = "Password is required.";
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,12}$/.test(password)) {
+        newErrors.password = "Password must be 8-12 characters, with an uppercase letter, a lowercase letter, and a special character.";
+    }
+
+    return newErrors;
+  }
 
   const getUserType = async (userId) => {
     const tables = ["Hawker", "PublicUser", "SystemAdmin", "HawkerLicenseManager"];
@@ -90,27 +127,32 @@ export default function LoginPage() {
   const handleNavigation = (user, userType) => {
     switch (userType) {
       case "Hawker":
+        alert("Successfully logged in as hawker!");
         setId(user.hawkerID);
         setUserType("hawker");
         navigate("/hawker/dashboard");
         break;
       case "PublicUser":
+        alert("Successfully logged in as public user!");
         setId(user.publicUserID);
         setUserType("publicuser");
         navigate("/publicuser/hawkers");
         break;
       case "SystemAdmin":
+        alert("Successfully logged in as system admin!");
         setId(user.systemAdminID);
         setUserType("admin");
         navigate("/admin/dashboard");
         break;
       case "HawkerLicenseManager":
+        alert("Successfully logged in as hawker license manager!");
         setId(user.hawkerLicenseManagerID);
         setUserType("hlm");
         navigate("/license-manager/dashboard");
         break;
       default:
-        setError("User type not found. Please contact support.");
+        setErrors({ form: "User type not found. Please contact support." });
+        setIsSubmitting(false);
         break;
     }
   };
@@ -141,29 +183,31 @@ export default function LoginPage() {
 
             <div className= "lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
                 <div className="h-8 mb-5">
-                    {error && (
+                    {errors.form && (
                       <p className="py-2 px-4 border-2 border-red-500 bg-red-200 text-red-800 rounded-[4px]">
-                        {error}
+                        {errors.form}
                       </p>
                     )}
                 </div>
                 <h1 className="text-4xl font-semibold mb-10">Welcome Back!</h1>
                 <form action="#" onSubmit={handleSubmit}>
                     <div className="mb-4 ">
-                    <label htmlFor="username" className="block text-[#333] font-semibold mb-1">IC Number:</label>
-                    <input onChange={(e) => setIcNumber(e.target.value)} type="text" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500" />
+                      <label htmlFor="username" className="block text-[#333] font-semibold mb-1">IC Number:</label>
+                      <input onChange={(e) => setIcNumber(e.target.value)} type="text" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500" />
+                      {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
                     </div>
                     
                     <div className="mb-4">
-                    <label htmlFor="password" className="block text-[#333] font-semibold mb-1">Password:</label>
-                    <input onChange={(e) => setPassword(e.target.value)} type="password" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500"/>
+                      <label htmlFor="password" className="block text-[#333] font-semibold mb-1">Password:</label>
+                      <input onChange={(e) => setPassword(e.target.value)} type="password" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500"/>
+                      {errors.password && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.password}</p>}
                     </div>
                 
                     <div className="mb-6">
-                    Don’t have an account? Sign up <a href="/account-selection" className="text-blue-500 hover:underline">here</a>!
+                      Don’t have an account? Sign up <a href="/account-selection" className="text-blue-500 hover:underline">here</a>!
                     </div>
                     
-                    <button type="submit" className="transition bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md py-3 px-4 w-full">Login</button>
+                    <button type="submit" className={`transition bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md py-3 px-4 w-full ${ isSubmitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600'}`}>{isSubmitting ? "Logging in" : "Login"}</button>
                 </form>
             </div>
         </div>
