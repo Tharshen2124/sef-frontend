@@ -11,6 +11,8 @@ const PublicUserSignUpPage = () => {
     const [password, setPassword] = useState("");
     const [icNumber, setIcNumber] = useState("");
     const [redirect, setRedirect] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [errors, setErrors] = useState({
         fullName: "",
         icNumber: "",
@@ -23,6 +25,7 @@ const PublicUserSignUpPage = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true);
 
         setErrors(null)
 
@@ -30,6 +33,7 @@ const PublicUserSignUpPage = () => {
         setErrors(validationErrors);
 
         if (Object.values(validationErrors).some(error => error !== "")) {
+            setIsSubmitting(false);
             return; // Stop submission if there are errors
         }
 
@@ -41,9 +45,10 @@ const PublicUserSignUpPage = () => {
             setId(publicUserID);
             setUserType("publicuser");
             setRedirect(true);
-
+            setIsSubmitting(false);
         } catch (error) {
-            console.log("bruh", error);
+            setIsSubmitting(false);
+            console.log("Unexpected error occured:", error);
             setErrors({ form: error.message });
         }
     }
@@ -176,7 +181,12 @@ const PublicUserSignUpPage = () => {
 
                         <p>Already have an account? <a href="/login">Login</a> here!</p>
 
-                        <input type="submit" className="submit" /> 
+                        <input
+                            type="submit"
+                            className="submit"
+                            value={isSubmitting ? "Submitting..." : "Submit"}
+                            disabled={isSubmitting} // Optionally disable button during submission
+                        />
                     </form>
                 </div>
             </div>
