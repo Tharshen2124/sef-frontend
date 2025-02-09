@@ -27,6 +27,14 @@ export default function SubmitFeedbackFormPage() {
     const handleFileChange = (file) => setImage(file); 
     
     const handleSubmitPart1 = async () => {
+
+        if(!feedbackTitle || !feedbackDescription || !hawkerRating) {
+            console.error("Please fill in all the fields!");
+            alert("Please fill in all the fields!");
+            return;
+        }
+
+
         console.log({
             feedbackTitle,
             feedbackDescription,

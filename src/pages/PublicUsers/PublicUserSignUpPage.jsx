@@ -1,107 +1,183 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './PublicUserSignUpPage.css';
-import HawkTuahLogo from "../../assets/hawkTuahLogo.svg"
+import HawkTuahLogo from "../../assets/hawkTuahLogo.svg";
 import { supabase } from '../../utils/supabaseClient';
 import { Navigate } from 'react-router-dom';
 import useAuthStore from '../../store/useAuthStore';
 
 const PublicUserSignUpPage = () => {
-    const [fullName, setFullName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [icNumber, setIcNumber] = useState();
-    const [redirect, setRedirect] = useState(false)
-    const { setId, setUserType } = useAuthStore.getState()
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [icNumber, setIcNumber] = useState("");
+    const [redirect, setRedirect] = useState(false);
+    const [errors, setErrors] = useState({
+        fullName: "",
+        icNumber: "",
+        email: "",
+        password: "",
+        form: ""
+    });
+
+    const { setId, setUserType } = useAuthStore.getState();
 
     async function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
 
-        const userId = await uploadUserData()
-        const publicUserID = await uploadPublicUserData(userId)
+        setErrors(null)
 
-        alert("Successfully signed up!")
-        setId(publicUserID)
-        setUserType("publicuser")
-        setRedirect(true)
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        if (Object.values(validationErrors).some(error => error !== "")) {
+            return; // Stop submission if there are errors
+        }
+
+        try {
+            const userId = await uploadUserData();
+            const publicUserID = await uploadPublicUserData(userId);
+
+            alert("Successfully signed up!");
+            setId(publicUserID);
+            setUserType("publicuser");
+            setRedirect(true);
+
+        } catch (error) {
+            console.log("bruh", error);
+            setErrors({ ...errors, form: error.message });
+        }
+    }
+
+    function validateForm() {
+        let newErrors = { fullName: "", icNumber: "", email: "", password: "" };
+
+        // Full Name validation
+        if (!fullName) {
+            newErrors.fullName = "Full name is required.";
+        } else if (fullName.length < 3) {
+            newErrors.fullName = "Full name must be at least 3 characters long.";
+        }
+
+        // IC Number validation (must be exactly 12 digits)
+        if (!icNumber) {
+            newErrors.icNumber = "IC number is required.";
+        } else if (!/^\d{12}$/.test(icNumber)) {
+            newErrors.icNumber = "IC number must be exactly 12 digits.";
+        }
+
+        // Email validation
+        if (!email) {
+            newErrors.email = "Email is required.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newErrors.email = "Invalid email format.";
+        }
+
+        // Password validation
+        if (!password) {
+            newErrors.password = "Password is required.";
+        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,12}$/.test(password)) {
+            newErrors.password = "Password must be 8-12 characters, with an uppercase letter, a lowercase letter, and a special character.";
+        }
+
+        return newErrors;
     }
 
     async function uploadUserData() {
         const { data: publicUserData, error } = await supabase
             .from('User')
-            .insert({ 
-                    fullName: fullName, 
-                    password: password, 
-                    icNumber: icNumber, 
-                    email: email
-                })
+            .insert({ fullName, password, icNumber, email })
             .select()
-            .single()
+            .single();
 
-        if(error) {
-            console.log(error);
-            alert("Error occured! Unable to sign up.")
+        if (error) {
+            if (error.code && error.code === "23505" && error.message.includes("icNumber")) {
+                console.log('unce')
+                throw new Error("IC Number already exists. Sign up with a different IC Number.");
+            } else if(error.code && error.code === "23505" && error.message.includes("User_email_key")) {
+                console.log('unce 2')
+                throw new Error("Email already exists. Sign up with a different email.");
+            } else {
+                throw new Error("Error occurred! Unable to sign up.");
+            }
         }
 
-        return publicUserData.userId
+        return publicUserData.userId;
     }
 
     async function uploadPublicUserData(userID) {
         const { data: publicUserData, error } = await supabase
             .from('PublicUser')
-            .insert({ 
-                    userID: userID, 
-                })
+            .insert({ userID })
             .select()
-            .single()
+            .single();
 
-        if(error) {
-            console.log(error);
-            alert("Error occured! Unable to sign up.")
+            console.log(error)
+
+        if (error) {
+            throw new Error("Error occurred! Unable to sign up.");
         }
 
-        return publicUserData.publicUserID
+        return publicUserData.publicUserID;
     }
 
-
-
-    if(redirect) {
-        return <Navigate to="/publicuser/hawkers" replace />
+    if (redirect) {
+        return <Navigate to="/publicuser/hawkers" replace />;
     }
 
     return (
         <div>
             <div className="signUpContainer">
-                
-                    <div className="signUpForm">
-                        <img src={HawkTuahLogo} alt="logo" />
-                        <h1>Sign Up</h1>
-                        <form action="" onSubmit={handleSubmit} >
-                        <div className="name">
-                            <label htmlFor="">Full Name</label>
-                            <input type="text" placeholder='' onChange={(e) => setFullName(e.target.value)} />
-                        </div>
-                
-                        <div className="icNumber">
-                            <label htmlFor="">IC Number</label>
-                            <input type="text" placeholder='xxxxxx-xx-xxxx' onChange={(e) => setIcNumber(e.target.value)} />
-                        </div>
-
-                        <div className="email">
-                            <label htmlFor="">Email</label>
-                            <input type="email" placeholder='' onChange={(e) => setEmail(e.target.value)} />
+                <div className="signUpForm">
+                    <img src={HawkTuahLogo} alt="logo" />
+                    <h1>Sign Up</h1>
+                    {errors.form && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.form}</p>}
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <label>Full Name</label>
+                            <input 
+                                type="text" 
+                                onChange={(e) => setFullName(e.target.value)} 
+                                onBlur={() => setErrors(validateForm())} 
+                            />
+                            {errors.fullName && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.fullName}</p>}
                         </div>
 
-                        <div className="password">
-                            <label htmlFor="">Password</label>
-                            <input type="text" placeholder='' onChange={(e) => setPassword(e.target.value)} />
+                        <div className="input-group mt-2">
+                            <label>IC Number</label>
+                            <input 
+                                type="text" 
+                                placeholder="xxxxxx-xx-xxxx" 
+                                onChange={(e) => setIcNumber(e.target.value)} 
+                                onBlur={() => setErrors(validateForm())} 
+                            />
+                            {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
                         </div>
-                        
+
+                        <div className="input-group mt-2">
+                            <label>Email</label>
+                            <input 
+                                type="email" 
+                                onChange={(e) => setEmail(e.target.value)} 
+                                onBlur={() => setErrors(validateForm())} 
+                            />
+                            {errors.email && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.email}</p>}
+                        </div>
+
+                        <div className="input-group mt-2">
+                            <label>Password</label>
+                            <input 
+                                type="password" 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                onBlur={() => setErrors(validateForm())} 
+                            />
+                            {errors.password && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.password}</p>}
+                        </div>
+
                         <p>Already have an account? <a href="/login">Login</a> here!</p>
-                
+
                         <input type="submit" className="submit" />
-                        </form>
-                     </div>
-               
+                    </form>
+                </div>
             </div>
         </div>
     );

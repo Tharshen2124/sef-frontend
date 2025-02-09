@@ -15,7 +15,8 @@
 }
 
 .accountbuttons p{
-    font-size: 24px;
+    font-size: 18px;
+    font-weight: 500;
     color: #3662E3;
 }
 .accountSelection h1{
@@ -38,6 +39,12 @@
     background: white;
     transition: all 0.2s ease;
     gap:30px
+}
+
+.userButton:hover, .hawkerButton:hover {
+    background: #F5F9FF;
+    border: 1px solid #3662E3;
+    text-decoration: none;
 }
 
 .account-icon {
