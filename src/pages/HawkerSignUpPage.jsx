@@ -3,7 +3,10 @@ import HawkTuahLogo from "../assets/hawkTuahLogo.svg"
 import { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import useAuthStore from "../store/useAuthStore";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { races } from "../utils/races";
+import { citizenshipStatuses } from "../utils/citizenshipStatuses";
+import { hashPassword } from "../utils/hashPassword";
 
 export default function HawkerSignUpPage() {
     const [fullName, setFullName] = useState();
@@ -17,188 +20,320 @@ export default function HawkerSignUpPage() {
     const [gender, setGender] = useState();
     const [race, setRace] = useState();
     const [hawkerImage, setHawkerImage] = useState();
-    const [redirect, setRedirect] = useState(false)
     const { setId, setUserType } = useAuthStore.getState()
+    const navigate = useNavigate();
+    const [errors, setErrors] = useState({
+            fullName: "",
+            icNumber: "",
+            email: "",
+            password: "",
+            citizenship: "",
+            contactAddress: "",
+            mobilePhoneNumber: "",
+            birthDate: "",
+            gender: "",
+            race: "",
+            hawkerImage: "",
+            form: ""
+    });
 
-    const handleFileChange = (file) => setHawkerImage(file); 
-    
-    const handleSubmitPart1 = async (e) => {
-        e.preventDefault();
-    
-        // Check if the file is valid
-        if (!hawkerImage) {
-            console.error("No image selected!");
-            alert("Please select an image before submitting.");
-            return;
-        }
-    
-        console.log({
-            fullName,
-            icNumber,
-            email,
-            password,
-            citizenship,
-            contactAddress,
-            mobilePhoneNumber,
-            birthDate,
-            gender,
-            race,
-            hawkerImage,
-        });
-    
-        // Upload the image to Supabase storage
-        const { data, error } = await supabase
-            .storage
-            .from("HawkerImage")
-            .upload(hawkerImage.name, hawkerImage, {
-                cacheControl: "3600",
-                upsert: false,
-            });
-    
-        if (error) {
-            console.error("Upload Error:", error.message);
-            alert("Image upload failed! Please try again.");
-            return;
-        }
-    
-        console.log("Uploaded image path:", data.path);
-        await handleSubmitPart2(data.path);
+    const handleFileChange = (file) => {
+        setHawkerImage(file);  // Save file in state
     };
+        
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    async function handleSubmitPart2(path) {
+        setErrors(null)
+
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        if (Object.values(validationErrors).some(error => error !== "")) {
+            return; // Stop submission if there are errors
+        }
+
         try {
-            // Get the public URL of the uploaded image
-            const { data: imageData, error: imageError } = supabase
-                .storage
-                .from("HawkerImage")
-                .getPublicUrl(path);
+            const userID = await uploadUserData();
+            if (!userID) return; 
+
+            const imageUrl = await handleImageUpload();
+            const hawkerID = await uploadHawkerData(imageUrl, userID);
     
-            if (imageError) throw new Error(`Error fetching image URL: ${imageError.message}`);
-            console.log("Image URL:", imageData.publicUrl);
-    
-            // Insert user into 'User' table
-            const { data: userData, error: userPostError } = await supabase
-                .from("User")
-                .insert([
-                    {
-                        fullName: fullName,
-                        icNumber: icNumber,
-                        email: email,
-                        password: password, 
-                    },
-                ])
-                .select()
-                .single();
-    
-            if (userPostError) throw new Error(`User insert error: ${userPostError.message}`);
-    
-            console.log("Inserted User:", userData);
-    
-            const userId = userData.userId; 
-            if (!userId) throw new Error("User ID not found!");
-    
-            // Insert data into 'Hawker' table
-            const { data: hawkerData, error: hawkerPostError } = await supabase
-                .from("Hawker")
-                .insert([
-                    {
-                        userID: userId, // Ensure the correct field name in your database
-                        citizenship: citizenship,
-                        contactAddress: contactAddress,
-                        mobilePhoneNumber: mobilePhoneNumber,
-                        birthDate: birthDate,
-                        gender: gender,
-                        race: race,
-                        hawkerImage: imageData.publicUrl,
-                    },
-                ])
-                .select()
-                .single();
-                console.log("Hawker Data", hawkerData.hawkerID)
-  
-            if (hawkerPostError) {
-                throw new Error(`Hawker insert error: ${hawkerPostError.message}`);
-            } else {
-                const hawkerID = hawkerData.hawkerID
-                setId(hawkerID)
-                setUserType("hawker")
-                alert("Successfully signed up!")
-                setRedirect(true)
-            }
-            
+            setId(hawkerID)
+            setUserType("hawker")
+            alert("Successfully signed up!")
+            navigate("/hawker/dashboard")
+
         } catch (error) {
             console.error(error.message);
-            alert(`An error occurred: ${error.message}`);
+            setErrors({ form: error.message });
         }
-    }
     
-    if(redirect) {
-        return <Navigate to="/hawker/dashboard" replace />
+    };
+
+    function validateForm() {
+        let newErrors = { fullName: "", icNumber: "", email: "", password: "" };
+
+        // Full Name validation
+        if (!fullName) {
+            newErrors.fullName = "Full name is required.";
+        } else if (fullName.length < 3) {
+            newErrors.fullName = "Full name must be at least 3 characters long.";
+        }
+
+        // IC Number validation (must be exactly 12 digits)
+        if (!icNumber) {
+            newErrors.icNumber = "IC number is required.";
+        } else if (!/^\d{12}$/.test(icNumber)) {
+            newErrors.icNumber = "IC number must be exactly 12 digits.";
+        }
+
+        // Email validation
+        if (!email) {
+            newErrors.email = "Email is required.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newErrors.email = "Invalid email format.";
+        }
+
+        // Password validation
+        if (!password) {
+            newErrors.password = "Password is required.";
+        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,12}$/.test(password)) {
+            newErrors.password = "Password must be 8-12 characters, with an uppercase letter, a lowercase letter, and a special character.";
+        }
+
+        if (!citizenship) {
+            newErrors.citizenship = "Citizenship is required.";
+        }
+
+        if (!contactAddress) {
+            newErrors.contactAddress = "Contact Address is required.";
+        } else if (contactAddress.trim().length < 10) {
+            newErrors.contactAddress = "Contact Address must be at least 10 characters long.";
+        } else if (!/^[a-zA-Z0-9\s,.\-\/]+$/.test(contactAddress.trim())) {
+            newErrors.contactAddress = "Contact Address contains invalid characters.";
+        } else if (/^\d+$/.test(contactAddress.trim())) {
+            newErrors.contactAddress = "Contact Address must include letters.";
+        } else if (!/\b\d{5}\b/.test(contactAddress.trim())) {
+            newErrors.contactAddress = "Contact Address must include a valid 5-digit postcode.";
+        }
+        
+
+        if (!mobilePhoneNumber) {
+            newErrors.mobilePhoneNumber = "Mobile Phone Number is required.";
+        } else if (!/^60\d{9,10}$/.test(mobilePhoneNumber)) {
+            newErrors.mobilePhoneNumber = "Invalid mobile phone number format. It should start with '60' followed by 8 or 9 digits.";
+        }
+
+        if (!birthDate) {
+            newErrors.birthDate = "Birth Date is required.";
+        }
+
+        if (!gender) {
+            newErrors.gender = "Gender is required";
+        }
+
+        if (!race) {
+            newErrors.race = "Race is required";
+        }
+
+        if (!hawkerImage) {
+            newErrors.hawkerImage = "Hawker Image is required.";
+        } else if (!(hawkerImage.type === "image/jpeg" || hawkerImage.type === "image/png")) {
+            newErrors.hawkerImage = "Hawker Image must be in JPG or PNG format.";
+        }
+        
+        return newErrors;
     }
+
+
+    async function handleImageUpload() {
+        const uniqueName = `${Date.now()}_${hawkerImage.name}`;
+
+        const { data: uploadData, error: uploadError } = await supabase
+        .storage
+        .from('HawkerImage')
+        .upload(uniqueName, hawkerImage, {
+            cacheControl: '3600',
+            upsert: false,
+        });
+
+        if(uploadError) {
+            console.error("HawkerImage", uploadError);
+        }
+
+        const { data: getData } = await supabase
+            .storage
+            .from('HawkerImage')
+            .getPublicUrl(uploadData.path);   
+        
+        if(!getData) {
+            console.error("No image retrieved")
+        }
+        
+        return getData.publicUrl
+    }        
+
+    async function uploadUserData() {
+        const { data: userData, error: userPostError } = await supabase
+            .from("User")
+            .insert([
+                {
+                    fullName: fullName,
+                    icNumber: icNumber,
+                    email: email,
+                    password: hashPassword(password), 
+                },
+            ])
+            .select()
+            .single();
+        
+        if (userPostError) {
+            if (userPostError.code && userPostError.code === "23505" && userPostError.message.includes("icNumber")) {
+                throw new Error("IC Number already exists. Sign up with a different IC Number.");
+            } else if(userPostError.code && userPostError.code === "23505" && userPostError.message.includes("email")) {
+                throw new Error("Email already exists. Sign up with a different email.");
+            } else {
+                throw new Error("Error occurred! Unable to sign up.");
+            }
+        }
+
+        return userData.userId;
+    }
+
+    async function uploadHawkerData(imageUrl, userID) {
+        const { data: hawkerData, error: hawkerPostError } = await supabase
+            .from("Hawker")
+            .insert([
+                {
+                    userID: userID, // Ensure the correct field name in your database
+                    citizenship: citizenship,
+                    contactAddress: contactAddress,
+                    mobilePhoneNumber: mobilePhoneNumber,
+                    birthDate: birthDate,
+                    gender: gender,
+                    race: race,
+                    hawkerImage: imageUrl,
+                },
+            ])
+            .select()
+            .single();
+            if (hawkerPostError) {
+                throw new Error(`Hawker insert error: ${hawkerPostError.message}`);
+            }
+
+            return hawkerData.hawkerID;
+        }
 
   return (
     <>
        <section className="mx-48 mt-32">
-        <form onSubmit={handleSubmitPart1}>
-                    <img src={HawkTuahLogo} alt="" />
-                   <div className="flex justify-between">
-                       <h1 className="text-[32px] font-bold">Sign Up as Hawker</h1>
-                       <div className="flex items-center gap-x-8">
-                            <p>Already have an account? <a href="" className="text-blue-600 underline">Login</a> here!</p>
-                            <input type="submit" className="bg-blue-600 rounded-md py-3 px-16 text-white" />
-                       </div>
-                   </div>
-                   <main className="grid grid-cols-2 gap-x-64 ">
-                       <div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Full Name:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" onChange={(e) => setFullName(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">IC Number:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setIcNumber(e.target.value)} />
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Email:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setEmail(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Password:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setPassword(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Citizenship:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setCitizenship(e.target.value)} />
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Contact Address:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setContactAddress(e.target.value)}/>
-                           </div>
-                       </div>
-       
-                       <div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Mobile Phone Number:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setMobilePhoneNumber(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Birth Date:</label>
-                               <input type="date" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" onChange={(e) => setBirthDate(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Gender:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setGender(e.target.value)} />
-                           </div>
-                           <div className="flex flex-col mt-5">
-                               <label htmlFor="" className="font-semibold">Race:</label>
-                               <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setRace(e.target.value)}/>
-                           </div>
-                           <div className="flex flex-col mt-4">
-                               <label htmlFor="" className="font-semibold mb-1">Hawker Image:</label>
-                               <BlueFileInput type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4" onChange={handleFileChange}/>
+        <form onSubmit={handleSubmit}>
+                <img className="w-36 mb-3" src={HawkTuahLogo} alt="" />
+                <div className="flex justify-between">
+                    <h1 className="text-[32px] font-bold">Sign Up as Hawker</h1>
+                    <div className="flex items-center gap-x-8">
+                        <p>Already have an account? <a href="" className="text-blue-600 underline">Login</a> here!</p>
+                        <input type="submit" className="bg-blue-600 rounded-md py-3 px-16 text-white" />
+                    </div>
+                </div>
+                {errors.form && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.form}</p>}
+                <main className="grid grid-cols-2 gap-x-64 ">
+                    <div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Full Name:</label>
+                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="John Doe" onChange={(e) => setFullName(e.target.value)} />
+                            {errors.fullName && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.fullName}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">IC Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 040221131004</span></label>
+                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="040221131004"  onChange={(e) => setIcNumber(e.target.value)}  />
+                            {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Email:</label>
+                            <input type="email" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="tim@gmail.com"  onChange={(e) => setEmail(e.target.value)} />
+                            {errors.email && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.email}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Password:</label>
+                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setPassword(e.target.value)} />
+                            {errors.password && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.password}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Citizenship:</label>
+                            <select 
+                                className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"
+                                onChange={(e) => setCitizenship(e.target.value)}
+                            >
+                                <option value="" disabled selected>Select Citizenship</option>
+                                {citizenshipStatuses.map((status, index) => (
+                                    <option key={index} value={status}>{status}</option>
+                                ))}
+                            </select>
+
+                            {errors.citizenship && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.citizenship}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Contact Address:</label>
+                            <input type="text" placeholder="No.1 Jalan Setapak, Bandar Puteri Rimbayu, 45260 J.." className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"  onChange={(e) => setContactAddress(e.target.value)} />
+                            {errors.contactAddress && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.contactAddress}</p>}
                         </div>
                     </div>
-            </main>
+    
+                    <div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Mobile Phone Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 60106674248</span></label>
+                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="60106674248"  onChange={(e) => setMobilePhoneNumber(e.target.value)} />
+                            {errors.mobilePhoneNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.mobilePhoneNumber}</p>}
+                        </div>
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Birth Date:</label>
+                            <input type="date" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" onChange={(e) => setBirthDate(e.target.value)} />
+                            {errors.birthDate && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.birthDate}</p>}
+                        </div>
+                        
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="gender" className="font-semibold">Gender:</label>
+                            <select 
+                                id="gender" 
+                                className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" 
+                                onChange={(e) => setGender(e.target.value)}
+                                value={gender} // Ensure controlled input
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            {errors.gender && (
+                                <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">
+                                    {errors.gender}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col mt-5">
+                            <label htmlFor="" className="font-semibold">Race:</label>
+                            <select 
+                            className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1"
+                            onChange={(e) => setRace(e.target.value)}
+                            >
+                                <option value="" disabled selected>Select Race</option>
+                                {races.map((race, index) => (
+                                    <option key={index} value={race}>{race}</option>
+                                ))}
+                            </select>
+                            {errors.race && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.race}</p>}
+                        </div>
+
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="" className="font-semibold mb-1">Hawker Image:</label>
+                            <BlueFileInput type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4" onChange={handleFileChange} />
+                            {errors.hawkerImage && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.hawkerImage}</p>}
+                        </div>
+                    </div>
+                </main>
             </form>
         </section> 
     </>

@@ -6,12 +6,13 @@ export function BlueFileInput({ onChange }) {
   const fileInputRef = useRef(null)
 
   const handleFileChange = (event) => {
-    const file = event.target.files?.[0] || null
-    setFileName(file ? file.name : null)
+    const file = event.target.files?.[0] || null;
+    setFileName(file ? file.name : null);
     if (onChange) {
-      onChange(file)
+      onChange(file); // Pass file to parent
     }
-  }
+  };
+  
 
   const handleClick = () => {
     fileInputRef.current?.click()
