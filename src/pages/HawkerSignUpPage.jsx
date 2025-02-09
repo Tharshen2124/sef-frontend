@@ -20,9 +20,34 @@ export default function HawkerSignUpPage() {
     const [gender, setGender] = useState();
     const [race, setRace] = useState();
     const [hawkerImage, setHawkerImage] = useState();
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { setId, setUserType } = useAuthStore.getState()
     const navigate = useNavigate();
     const [errors, setErrors] = useState({
+        fullName: "",
+        icNumber: "",
+        email: "",
+        password: "",
+        citizenship: "",
+        contactAddress: "",
+        mobilePhoneNumber: "",
+        birthDate: "",
+        gender: "",
+        race: "",
+        hawkerImage: "",
+        form: ""
+    });
+
+    const handleFileChange = (file) => {
+        setHawkerImage(file);  // Save file in state
+    };
+        
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setIsSubmitting(true);
+
+        setErrors({
             fullName: "",
             icNumber: "",
             email: "",
@@ -35,21 +60,13 @@ export default function HawkerSignUpPage() {
             race: "",
             hawkerImage: "",
             form: ""
-    });
-
-    const handleFileChange = (file) => {
-        setHawkerImage(file);  // Save file in state
-    };
-        
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        setErrors(null)
+        });    
 
         const validationErrors = validateForm();
         setErrors(validationErrors);
 
         if (Object.values(validationErrors).some(error => error !== "")) {
+            setIsSubmitting(false);
             return; // Stop submission if there are errors
         }
 
@@ -66,6 +83,7 @@ export default function HawkerSignUpPage() {
             navigate("/hawker/dashboard")
 
         } catch (error) {
+            setIsSubmitting(false);
             console.error(error.message);
             setErrors({ form: error.message });
         }
@@ -80,13 +98,15 @@ export default function HawkerSignUpPage() {
             newErrors.fullName = "Full name is required.";
         } else if (fullName.length < 3) {
             newErrors.fullName = "Full name must be at least 3 characters long.";
+        } else if (!/^[A-Za-z\s]+$/.test(fullName)) {
+            newErrors.fullName = "Full name can only contain letters and spaces.";
         }
 
-        // IC Number validation (must be exactly 12 digits)
+        // IC Number validation
         if (!icNumber) {
             newErrors.icNumber = "IC number is required.";
-        } else if (!/^\d{12}$/.test(icNumber)) {
-            newErrors.icNumber = "IC number must be exactly 12 digits.";
+        } else if (!/^\d{6}-\d{2}-\d{4}$/.test(icNumber)) {
+            newErrors.icNumber = "IC number must follow the format XXXXXX-XX-XXXX. No special characters (besides the dash) and letters.";
         }
 
         // Email validation
@@ -128,7 +148,16 @@ export default function HawkerSignUpPage() {
 
         if (!birthDate) {
             newErrors.birthDate = "Birth Date is required.";
-        }
+        } else {
+            const birthDateObj = new Date(birthDate);
+            const today = new Date();
+            const minAllowedDate = new Date();
+            minAllowedDate.setFullYear(today.getFullYear() - 18);
+    
+            if (birthDateObj > minAllowedDate) {
+                newErrors.birthDate = "You must be 18 years and above to register as a hawker.";
+            }
+        }    
 
         if (!gender) {
             newErrors.gender = "Gender is required";
@@ -176,6 +205,7 @@ export default function HawkerSignUpPage() {
     }        
 
     async function uploadUserData() {
+        const hashedPassword = await hashPassword(password);
         const { data: userData, error: userPostError } = await supabase
             .from("User")
             .insert([
@@ -183,7 +213,7 @@ export default function HawkerSignUpPage() {
                     fullName: fullName,
                     icNumber: icNumber,
                     email: email,
-                    password: hashPassword(password), 
+                    password: hashedPassword, 
                 },
             ])
             .select()
@@ -235,7 +265,12 @@ export default function HawkerSignUpPage() {
                     <h1 className="text-[32px] font-bold">Sign Up as Hawker</h1>
                     <div className="flex items-center gap-x-8">
                         <p>Already have an account? <a href="" className="text-blue-600 underline">Login</a> here!</p>
-                        <input type="submit" className="bg-blue-600 rounded-md py-3 px-16 text-white" />
+                        <input
+                            type="submit"
+                            className={`rounded-md py-3 px-16 text-white ${ isSubmitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600'}`}
+                            value={isSubmitting ? "Submitting..." : "Submit"}
+                            disabled={isSubmitting}
+                        />
                     </div>
                 </div>
                 {errors.form && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.form}</p>}
@@ -247,8 +282,8 @@ export default function HawkerSignUpPage() {
                             {errors.fullName && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.fullName}</p>}
                         </div>
                         <div className="flex flex-col mt-5">
-                            <label htmlFor="" className="font-semibold">IC Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 040221131004</span></label>
-                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="040221131004"  onChange={(e) => setIcNumber(e.target.value)}  />
+                            <label htmlFor="" className="font-semibold">IC Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 040221-13-1004</span></label>
+                            <input type="text" className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" placeholder="xxxxxx-xx-xxxx"  onChange={(e) => setIcNumber(e.target.value)}  />
                             {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
                         </div>
                         <div className="flex flex-col mt-5">

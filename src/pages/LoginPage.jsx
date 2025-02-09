@@ -192,8 +192,8 @@ export default function LoginPage() {
                 <h1 className="text-4xl font-semibold mb-10">Welcome Back!</h1>
                 <form action="#" onSubmit={handleSubmit}>
                     <div className="mb-4 ">
-                      <label htmlFor="username" className="block text-[#333] font-semibold mb-1">IC Number:</label>
-                      <input onChange={(e) => setIcNumber(e.target.value)} type="text" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500" />
+                      <label htmlFor="username" className="block text-[#333] font-semibold mb-1">IC Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 040221-13-1004</span></label>
+                      <input onChange={(e) => setIcNumber(e.target.value)} placeholder="xxxxxx-xx-xxxx" type="text" className="transition w-full border border-gray-200 rounded-md py-2 px-3 focus:outline-none outline-2 focus:outline-blue-500" />
                       {errors.icNumber && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.icNumber}</p>}
                     </div>
                     

@@ -28,7 +28,13 @@ const PublicUserSignUpPage = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        setErrors(null)
+        setErrors({
+            fullName: "",
+            icNumber: "",
+            email: "",
+            password: "",
+            form: ""
+        });
 
         const validationErrors = validateForm();
         setErrors(validationErrors);
@@ -144,7 +150,7 @@ const PublicUserSignUpPage = () => {
                     {errors.form && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800 ">{errors.form}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="input-group">
-                            <label>Full Name</label>
+                            <label>Full Name: </label>
                             <input 
                                 type="text" 
                                 onChange={(e) => setFullName(e.target.value)} 
@@ -154,7 +160,7 @@ const PublicUserSignUpPage = () => {
                         </div>
 
                         <div className="input-group mt-2">
-                            <label>IC Number</label>
+                            <label>IC Number: <span className="text-sm text-gray-800 font-normal italic" >e.g: 040221-13-1004</span></label>
                             <input 
                                 type="text" 
                                 placeholder="xxxxxx-xx-xxxx" 
@@ -164,7 +170,7 @@ const PublicUserSignUpPage = () => {
                         </div>
 
                         <div className="input-group mt-2">
-                            <label>Email</label>
+                            <label>Email: </label>
                             <input 
                                 type="email" 
                                 placeholder="john@gmail.com"
@@ -174,7 +180,7 @@ const PublicUserSignUpPage = () => {
                         </div>
 
                         <div className="input-group mt-2">
-                            <label>Password</label>
+                            <label>Password: </label>
                             <input 
                                 type="password" 
                                 onChange={(e) => setPassword(e.target.value)} 
