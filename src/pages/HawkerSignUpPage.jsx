@@ -138,7 +138,6 @@ export default function HawkerSignUpPage() {
         } else if (!/\b\d{5}\b/.test(contactAddress.trim())) {
             newErrors.contactAddress = "Contact Address must include a valid 5-digit postcode.";
         }
-        
 
         if (!mobilePhoneNumber) {
             newErrors.mobilePhoneNumber = "Mobile Phone Number is required.";

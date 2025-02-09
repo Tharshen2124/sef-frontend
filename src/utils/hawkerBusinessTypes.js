@@ -1,0 +1,36 @@
+export const hawkerBusinessTypes = [
+    // Food & Beverage Stalls
+    "Food Stall",
+    "Beverage Stall",
+    "Fruit Stall",
+    "Dessert Stall",
+    "Grilled/Fried Food Stall",
+    "Noodle Stall",
+    "Rice Stall",
+    "Seafood Stall",
+    "Western Food Stall",
+    "Vegetarian Food Stall",
+    "Pastry/Bakery Stall",
+    "Local Delicacies Stall",
+    "Snack Stall",
+    "Juice/Smoothie Stall",
+    "Traditional Kuih Stall",
+    "Mobile Food Truck",
+    "Night Market Stall",
+    "Breakfast Stall",
+    "Halal Food Stall",
+    "Non-Halal Food Stall",
+
+    // Merchandise Stalls
+    "Clothing Stall",
+    "Accessories Stall",
+    "Shoes Stall",
+    "Handmade Crafts Stall",
+    "Home Decor Stall",
+    "Toys & Games Stall",
+    "Gadgets & Electronics Stall",
+    "Books & Stationery Stall",
+    "Beauty & Skincare Stall",
+    "Secondhand Goods Stall",
+    "Souvenir & Gift Stall"
+];
