@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import { supabase } from '../../utils/supabaseClient';
 import useAuthStore from '../../store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function HawkerViewPenaltyPage() {
     const [penalties, setPenalties] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { hawkerID } = useParams();
-    const { id } = useAuthStore();
+    const navigate = useNavigate();
+    const { id, userType } = useAuthStore();
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'hawker') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]);
 
     useEffect(() => {
         async function fetchPenalties() {
             try {
                 const { data, error } = await supabase
                     .from('Penalty')
-                    .select('*')
-                    .eq('hawkerID', hawkerID)
+                    .select(`*`)
+                    .eq('hawkerID', id)
                     .order('created_at', { ascending: false });
 
                 if (error) {
@@ -34,7 +45,7 @@ export default function HawkerViewPenaltyPage() {
         }
 
         fetchPenalties();
-    }, [hawkerID]);
+    }, []);
 
     if (loading) {
         return (
@@ -78,7 +89,7 @@ export default function HawkerViewPenaltyPage() {
         ))}
 
     {penalties.length === 0 && (
-        <p className="text-center mt-6 text-gray-500">No penalties found.</p>
+         <p class="text-center bg-slate-100 border-2 border-slate-500 py-2 text-slate-700 rounded-md">No penalties have been issued to you.</p>
     )}
     </section>
     </>

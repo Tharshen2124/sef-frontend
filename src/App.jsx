@@ -61,14 +61,14 @@ function App() {
           {/* Hawker routes */}
           <Route path="/hawker/profile/edit" element={<EditProfilePage />} />
           <Route path="/hawker/dashboard" element={<HawkerDashboardPage />} />
-          <Route path="/hawker/application-submissions-status/:hawkerID" element={<ApplicationSubmissionStatusPage />} />
+          <Route path="/hawker/application-submissions-status" element={<ApplicationSubmissionStatusPage />} />
           <Route path="/hawker/feedback" element={<HawkerFeedbackPage />} />
           <Route path="/hawker/renew-license" element={<RenewLicensePage />} />
           <Route path="/hawker/profile" element={<HawkerProfilePage />} />
           <Route path="/hawker/apply-license" element={<ApplyForLicensePage />} />
-          <Route path="/hawker/view-penalty/:hawkerID" element={<HawkerViewPenaltyPage />} />
+          <Route path="/hawker/view-penalty" element={<HawkerViewPenaltyPage />} />
           <Route path="/hawker/feedback-more-info/:hawkerID/:feedbackID" element={<HawkerFeedbackMoreInfoPage />} />
-          <Route path="/hawker/application-more-info/:hawkerID/:licenseApplicationID" element={<ApplicationMoreInfoPage />} />
+          <Route path="/hawker/application-submissions-status/:licenseApplicationID" element={<ApplicationMoreInfoPage />} />
 
           {/* System Admin routes */}
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />

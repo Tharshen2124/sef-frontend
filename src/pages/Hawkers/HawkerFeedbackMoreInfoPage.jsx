@@ -1,11 +1,25 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabaseClient";
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function HawkerFeedbackMoreInfoPage() {
-    const {hawkerID, feedbackID}=useParams();
-    const [feedbacks, setFeedbacks] =useState([]);
+    const {hawkerID, feedbackID} = useParams();
+    const [feedbacks, setFeedbacks] = useState([]);
+    const { id, userType } = useAuthStore();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'hawker') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]);
 
     const formattedDateTime = (isoString) => {
         const date = new Date(isoString);

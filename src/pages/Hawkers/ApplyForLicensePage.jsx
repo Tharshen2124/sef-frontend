@@ -50,11 +50,16 @@ export default function ApplyForLicensePage() {
         form: ""
     })
     
-    useEffect(() => {
-        if (userType !== 'hawker') {
-            navigate("/");
+     useEffect(() => {
+        if (hawkerId && hawkerId !== "0" && userType === 'hawker') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
         }
-    }, [userType]);  
+    }, [hawkerId, userType]);
 
     const handlePassportPhotoChange = (file) => setPassportPhoto(file)
     const handlePaymentProofChange = (file) => setPaymentProof(file)

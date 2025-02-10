@@ -5,23 +5,24 @@ import License from "../../assets/licenseIcon.svg"
 import Penalties from "../../assets/Penalties.svg"
 import Profile from "../../assets/profile.svg"
 import appSubStatus from "../../assets/appSubStatus.svg"
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import { useEffect, useState } from "react";
 
 export default function HawkerDashboardPage() {
     const { id, userType } = useAuthStore(); 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (userType !== 'hawker') {
-            setShouldRedirect(true);
+        if (id && id !== "0" && userType === 'hawker') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
         }
     }, [id, userType]);  
-
-    if (shouldRedirect) {
-        return <Navigate to="/" replace />;
-    } 
    
   return (
     <>
@@ -41,8 +42,8 @@ export default function HawkerDashboardPage() {
                     <img src={License} alt="" className="mx-auto"/>
                     <h2 className="text-blue-600 font-semibold text-lg text-center mt-10">Apply License</h2>
                 </a>
-                <a href="/hawker" className="w-[340px] border border-blue-200 px-6 py-[50px] rounded-lg hover:border-blue-600 hover:outline hover:outline-blue-600 transition">
-                    <img src={Penalties} alt="" className="mx-auto w-64"/>
+                <a href="/hawker/view-penalty" className="w-[340px] border border-blue-200 px-6 py-[50px] rounded-lg hover:border-blue-600 hover:outline hover:outline-blue-600 transition">
+                    <img src={Penalties} alt="" className="mx-auto"/>
                     <h2 className="text-blue-600 font-semibold text-lg text-center mt-10">Penalties</h2>
                 </a>
                 <a href="/hawker/renew-license" className="w-[340px] border border-blue-200 px-16 py-[50px] rounded-lg hover:border-blue-600 hover:outline hover:outline-blue-600 transition">

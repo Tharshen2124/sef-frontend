@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react';
 import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import useAuthStore from '../../store/useAuthStore';
 import { supabase } from '../../utils/supabaseClient';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function HawkerFeedbackPage() {
   const { id, userType } = useAuthStore(); //get user's id and user type
-  const [shouldRedirect, setShouldRedirect] = useState(false); //determine if user should be redirected
   const [feedbackItems, setFeedbackItems] = useState([]); //get feedback
   const [loading, setLoading] = useState(true); //loading state
   const [error, setError] = useState(null); //error state
+  const navigate = useNavigate()
   
   useEffect(() => {
-    if (userType !== 'hawker') {
-      setShouldRedirect(true);
+    if (id && id !== "0" && userType === 'hawker') {
+        // User is authorized; no action needed
+        return;
+    } else {
+        // User is not authorized; show alert and redirect
+        alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+        navigate('/');
     }
-  }, [userType]);   //if user is not a hawker, redirect to home page
+  }, [id, userType]);
 
   //fetch data from supabase
   useEffect(() => {
@@ -50,11 +55,6 @@ export default function HawkerFeedbackPage() {
     }
   }, [id]);
 
-  // Redirect non-hawker users
-  if (shouldRedirect) {
-    return <Navigate to="/" replace />;
-  } 
-
   return (
     <>
     {/* Display feedback*/}
@@ -74,7 +74,7 @@ export default function HawkerFeedbackPage() {
 
         {/* Show no data message */}
         {!loading && !error && feedbackItems.length === 0 && (
-          <p className="text-center text-gray-500">No feedback found.</p>
+           <p class="text-center bg-slate-100 border-2 border-slate-500 py-2 text-slate-700 rounded-md">No feedbacks have been made to you.</p>
         )}
 
         {/* Render feedback table */}
