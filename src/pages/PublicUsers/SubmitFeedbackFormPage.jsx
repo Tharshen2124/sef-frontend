@@ -3,16 +3,22 @@ import { BlueFileInput } from "../../components/General/BlueFileInput";
 import NavigationBar from "../../components/PublicUsers/NavigationBar";
 import { supabase } from "../../utils/supabaseClient";
 import useAuthStore from "../../store/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function SubmitFeedbackFormPage() {
     const [feedbackTitle, setFeedbackTitle] = useState();
     const [feedbackDescription, setFeedbackDescription] = useState();
-    const [hawkerName, setHawkerName] = useState();
     const [hawkerRating, setHawkerRating] = useState();
     const [image, setImage] = useState();
     const { id, userType } = useAuthStore();
+    const { hawkerID } = useParams()
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({ 
+        feedbackTitle: "",
+        feedbackDescription: "",
+        hawkerRating: "",
+        image: ""
+    });
     
     useEffect(() => {
         if (id && id !== "0" && userType === 'publicuser') {
@@ -29,21 +35,18 @@ export default function SubmitFeedbackFormPage() {
     
     const handleSubmitPart1 = async () => {
 
-        if(!feedbackTitle || !feedbackDescription || !hawkerRating) {
-            console.error("Please fill in all the fields!");
-            alert("Please fill in all the fields!");
+        const newErrors = validateForm();
+        setErrors(newErrors);
+
+        if (Object.values(newErrors).some(x => x !== "")) {
             return;
         }
 
+        if (!image) {
+            await handleSubmitPart2(null);
+            return;
+        }
 
-        console.log({
-            feedbackTitle,
-            feedbackDescription,
-            hawkerName,
-            hawkerRating,
-            image,
-        });
-    
         // Upload the image to the Supabase bucket
         const { data, error } = await supabase
             .storage
@@ -58,33 +61,69 @@ export default function SubmitFeedbackFormPage() {
             return;
         }
 
-        console.log(data.path);
         await handleSubmitPart2(data.path);
     };
 
     async function handleSubmitPart2(path) {
-        console.log("hello");
+        let imageUrl;
 
-        const { data, error } = supabase
-            .storage
-            .from('ImageForEvidenceForFeedback')
-            .getPublicUrl(path);   
+        if (path) {
+            const { data, error } = supabase
+                .storage
+                .from('ImageForEvidenceForFeedback')
+                .getPublicUrl(path);   
         
-        if(error) console.log("Error:", error);
-        if(image) console.log("Image:", data.publicUrl);
-
+            if(error) console.log("Error:", error);
+            if(image) console.log("Image:", data.publicUrl);
+            imageUrl = data.publicUrl;
+        } else {
+            imageUrl = null;
+        }
+        
         const { postError } = await supabase.from('Feedback').insert({
-            publicUserID: 4, 
-            hawkerID: 13, 
+            publicUserID: id, 
+            hawkerID: hawkerID, 
             feedbackTitle: feedbackTitle, 
             feedbackDescription: feedbackDescription, 
             hawkerRating: hawkerRating, 
-            imageForSupportingEvidence: data.publicUrl
+            imageForSupportingEvidence: imageUrl
         })
         
         if(postError) {
             console.log(error);
+        } else {
+            alert("Feedback submitted successfully!");
+            navigate('/publicuser/feedback');
         }
+    }
+
+    function validateForm() {
+        let newErrors = {
+            feedbackTitle: "",
+            feedbackDescription: "",
+            hawkerRating: "",
+            image: ""
+        }
+    
+        if (!feedbackTitle) {
+            newErrors.feedbackTitle = "Feedback title is required."
+        }
+    
+        if (!feedbackDescription) {
+            newErrors.feedbackDescription = "Feedback description is required."
+        }
+    
+        if (!hawkerRating) {
+            newErrors.hawkerRating = "Hawker rating is required."
+        } else if (hawkerRating < 0 || hawkerRating > 5) {
+            newErrors.hawkerRating = "Hawker rating must be between 0 and 5.";
+        }
+    
+        if (image && image.type !== "image/jpeg" && image.type !== "image/png") {
+            newErrors.image = "Image must be in JPEG or PNG format.";
+        }
+    
+        return newErrors
     }
 
   return (
@@ -92,34 +131,39 @@ export default function SubmitFeedbackFormPage() {
         <NavigationBar />
         <section className="p-10">
             <div className="mb-5 text-[12px]">
-                <a href="" className="text-blue-600 hover:underline">Feedback</a>
+                <a href="/publicuser/feedback" className="text-blue-600 hover:underline">Feedback</a>
                 <span> {">"} </span>
-                <a href="" className="text-blue-600 hover:underline">Submit Feedback</a>
+                {}
+                <a href={`/publicuser/feedback/submit-feedback/${hawkerID}`} className="text-blue-600 hover:underline">Submit Feedback</a>
             </div>
 
             <div className="border border-[#e0e0e0]  flex flex-col mx-auto w-[530px] p-16 rounded-lg">
                 <h1 className="text-2xl font-bold text-left">Submit Feedback</h1>
-                
+
                 <div className="flex flex-col mt-8">
                     <label htmlFor="" className="font-semibold">Feedback Title:</label>
-                    <input type="text" onChange={(e) => setFeedbackTitle(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    <input type="text" placeholder="Good service" onChange={(e) => setFeedbackTitle(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    {errors.feedbackTitle && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.feedbackTitle}</p>}
                 </div>
 
                 <div className="flex flex-col mt-4">
                     <label htmlFor="" className="font-semibold">Feedback Description:</label>
-                    <input type="text" onChange={(e) => setFeedbackDescription(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    <textarea type="text" placeholder="server is fast, very responsive, and is very sweet with customers" onChange={(e) => setFeedbackDescription(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    {errors.feedbackDescription && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.feedbackDescription}</p>}
                 </div>
 
                 <div className="flex flex-col mt-4">
-                    <label htmlFor="" className="font-semibold">Hawker Rating:</label>
-                    <input type="text" onChange={(e) => setHawkerRating(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    <label htmlFor="" className="font-semibold">Hawker Rating {"(Rate from 1 to 5)"}:</label>
+                    <input type="text" placeholder="5" onChange={(e) => setHawkerRating(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    {errors.hawkerRating && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.hawkerRating}</p>}
                 </div>
                 <div className="flex flex-col mt-4">
                     <label htmlFor="" className="font-semibold">Image for Evidence <i className="font-normal">{"(Optional)"}</i>:</label>
                     <BlueFileInput onChange={handleFileChange} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    {errors.image && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.image}</p>}
                 </div>
-                <button className="bg-blue-600 py-3 text-white mt-8 rounded-md" onClick={handleSubmitPart1}>Submit</button>
 
+                <button className="bg-blue-600 py-3 text-white mt-8 rounded-md" onClick={handleSubmitPart1}>Submit</button>
             </div>
         </section>
     </>

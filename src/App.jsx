@@ -44,13 +44,14 @@ function App() {
     <>
       <Router>
         <Routes>
+          {/* Public routes */}
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<MainPage />} />
           <Route path="/account-selection" element={<AccountSelection />} />
           <Route path="/hawker-signup" element={<HawkerSignUpPage />}/>
+          <Route path="/publicuser/signup" element={<PublicUserSignUpPage />} />
 
           {/* Public User routes */}
-          <Route path="/publicuser/signup" element={<PublicUserSignUpPage />} />
           <Route path="/publicuser/hawkers" element={<HawkerPage />} />
           <Route path="/publicuser/hawkers/:hawkerID" element={<HawkerMoreInfoPage/>} />
           <Route path="/publicuser/feedback" element={<FeedbackPage/>} />

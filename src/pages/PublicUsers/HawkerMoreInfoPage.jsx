@@ -96,7 +96,7 @@ export default function HawkerMoreInfoPage() {
             <div
                 className="h-[400px] relative bg-cover bg-center"
                 style={{
-                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${encodeURI('/image.png')})`,
+                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${encodeURI(info.hawkerImage)})`,
                 }}
             >
                 <div className="absolute bottom-0 left-0 p-10">

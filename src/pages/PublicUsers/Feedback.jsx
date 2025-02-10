@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function FeedbackPage() {
     const { id, userType } = useAuthStore(); 
-    const publicUserId = "3";
     const [feedbackItems, setFeedbackItems] = useState(null); // Stores feedback data
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
@@ -31,9 +30,12 @@ export default function FeedbackPage() {
                     .from('Feedback')
                     .select(`
                         *, 
-                        Hawker(*)
+                        Hawker (
+                            *,
+                            User (*)
+                        )
                     `)
-                    .eq('publicUserID', publicUserId);
+                    .eq('publicUserID', id);
 
                 if (error) {
                     throw new Error(error.message); // Throw error for easier handling
@@ -52,7 +54,7 @@ export default function FeedbackPage() {
         }
 
         getData();
-    }, [publicUserId]);
+    }, []);
 
     return (
         <>
@@ -98,11 +100,11 @@ export default function FeedbackPage() {
                                         {item.feedbackDescription}
                                     </td>
                                     <td className="py-4 sm:pl-16 md:pl-24 xl:pl-48">
-                                        {item.Hawker?.name || 'Unknown Hawker'}
+                                        {item.Hawker?.User?.fullName || 'Unknown Hawker'}
                                     </td>
                                     <td className="py-4">
                                         <a
-                                            href="#"
+                                            href={`/publicuser/feedback/${item.feedbackID}`}
                                             className="text-blue-600 hover:text-blue-800 underline"
                                         >
                                             More Details

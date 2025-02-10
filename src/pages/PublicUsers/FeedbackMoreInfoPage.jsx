@@ -27,7 +27,10 @@ export default function FeedbackMoreInfoPage() {
                 .from('Feedback')
                 .select(`
                     *, 
-                    Hawker(*) 
+                    Hawker(
+                        *,
+                        User(*)
+                    ) 
                 `)
                 .eq('feedbackID', feedbackID); // Assuming feedbackID matches the column name
 
@@ -50,40 +53,47 @@ export default function FeedbackMoreInfoPage() {
             <NavigationBar />
             <section className="p-10">
                 <div className="mb-5 text-[12px]">
-                    <a href="#" className="text-blue-600 hover:underline">Feedback</a>
+                    <a href="/publicuser/feedback" className="text-blue-600 hover:underline">Feedback</a>
                     <span> {">"} </span>
-                    <a href="#" className="text-blue-600 hover:underline">Submit Feedback</a>
+                    {info && (
+                        <a href={`/publicuser/feedback/${info.feedbackID}`} className="text-blue-600 hover:underline">Submit Feedback</a>
+                    )}
                 </div>
                 {info ? (
                     <div className="border border-[#e0e0e0] flex flex-col mx-auto w-[550px] px-12 py-10 rounded-lg">
                         <h1 className="text-2xl font-bold text-center">Feedback to</h1>
-                        <h3 className="text-[#555] font-semibold text-center">{info.Hawker?.name || "Unknown Hawker"}</h3>
+                        <h3 className="text-[#555] font-semibold text-center">{info.Hawker?.User.fullName || "Unknown Hawker"}</h3>
                         
                         <div className="mt-8">
                             <h4 className="font-semibold">Title</h4>
-                            <p className="text-[#333] text-[14px] text-justify">{info.feedbackTitle}</p>
+                            <p className="text-[#333]  text-justify">{info.feedbackTitle}</p>
                         </div>
 
                         <div className="mt-4">
                             <h4 className="font-semibold">Description</h4>        
-                            <p className="text-[#333] text-[14px] text-justify">{info.feedbackDescription}</p>
+                            <p className="text-[#333] text-justify">{info.feedbackDescription}</p>
                         </div>
 
                         <div className="mt-4">
                             <h4 className="font-semibold">Hawker Rating</h4>
-                            <p className="text-[#333] text-[14px]">{info.hawkerRating}</p>
+                            <p className="text-[#333] ">{info.hawkerRating}</p>
                         </div>
 
                         <div className="mt-4">
                             <h4 className="font-semibold">Image For Supporting Evidence </h4>
-                            <p className="text-[14px] font-semibold text-blue-600 underline">
-                                <a target="_blank" href={info.imageForSupportingEvidence} rel="noopener noreferrer">Photo link</a>
-                            </p>
+                            { info.imageForSupportingEvidence ? (
+                                <p className="font-semibold text-blue-600 underline">
+                                    <a target="_blank" href={info.imageForSupportingEvidence} rel="noopener noreferrer">Photo link</a>
+                                </p>
+                            ) : (
+                                <p className="text-[#333]">No image provided</p>
+                            )}
+                            
                         </div>
 
                         <div className="mt-4">
                             <h4 className="font-semibold">Created At</h4>
-                            <p className="text-[#333] text-[14px]">{new Date(info.createdAt).toLocaleString()}</p>
+                            <p className="text-[#333]">{new Date(info.createdAt).toLocaleString()}</p>
                         </div>
                     </div>
                 ) : (

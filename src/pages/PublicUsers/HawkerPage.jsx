@@ -46,6 +46,8 @@ export default function HawkerPage() {
         getData();
     }, []);
 
+    console.log(hawkers)
+
     // 🔹 Filter hawkers based on the search term (business name)
     const filteredHawkers = hawkers.filter(hawker =>
         hawker.BusinessInfo[0]?.businessName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,6 +89,7 @@ export default function HawkerPage() {
                                 hawkerID={hawker.hawkerID}
                                 name={hawker.BusinessInfo[0].businessName} 
                                 address={hawker.LicenseApplication[0].locationPlan} 
+                                hawkerImage={hawker.hawkerImage}
                             />
                         ))
                     ) : (
