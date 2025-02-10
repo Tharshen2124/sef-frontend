@@ -1,0 +1,6 @@
+1. float value
+2. business name with numbers (done)
+3. two min business time (done)
+4. reverse time business (done)
+5. location plan (done)
+6. mix culture

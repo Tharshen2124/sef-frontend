@@ -179,6 +179,8 @@ export default function ApplyForLicensePage() {
             newErrors.businessName = "Business Name is required.";
         } else if (businessName.length < 3) {
             newErrors.businessName = "Full name must be at least 3 characters long.";
+        } else if (!nameRegex.test(businessName)) {
+            newErrors.businessName = "Business Name must contain only letters and spaces.";
         }
     
         if (!businessType) {
@@ -188,25 +190,38 @@ export default function ApplyForLicensePage() {
         if (!businessStartTime) {
             newErrors.businessStartTime = "Business Start Time is required.";
         }
-    
+        
         if (!businessEndTime) {
             newErrors.businessEndTime = "Business End Time is required.";
         }
-
-        if (businessStartTime && businessEndTime && businessStartTime === businessEndTime) {
-            newErrors.businessEndTime = "Business Start Time and End Time must not be the same.";
-        }    
-    
+        
+        if (businessStartTime && businessEndTime) {
+            // Convert the time strings to hours and minutes
+            const [startHours, startMinutes] = businessStartTime.split(":").map(Number);
+            const [endHours, endMinutes] = businessEndTime.split(":").map(Number);
+        
+            // Convert to minutes since midnight for easy comparison
+            const startTimeInMinutes = startHours * 60 + startMinutes;
+            const endTimeInMinutes = endHours * 60 + endMinutes;
+        
+            if (startTimeInMinutes >= endTimeInMinutes) {
+                newErrors.businessEndTime = "Business End Time must be after Business Start Time.";
+            } else if ((endTimeInMinutes - startTimeInMinutes) < 60) {
+                newErrors.businessEndTime = "Minimum business operation time is 1 hour.";
+            }
+        }
+        
+        
         if (!locationPlan) {
             newErrors.locationPlan = "Location Plan is required.";
         } else if (locationPlan.trim().length < 10) {
-            newErrors.locationPlan = "Contact Address must be at least 10 characters long.";
+            newErrors.locationPlan = "Location Plan must be at least 10 characters long.";
         } else if (!/^[a-zA-Z0-9\s,.\-\/]+$/.test(locationPlan.trim())) {
-            newErrors.locationPlan = "Contact Address contains invalid characters.";
+            newErrors.locationPlan = "Location Plan contains invalid characters.";
         } else if (/^\d+$/.test(locationPlan.trim())) {
-            newErrors.locationPlan = "Contact Address must include letters.";
+            newErrors.locationPlan = "Location Plan must include letters.";
         } else if (!/\b\d{5}\b/.test(locationPlan.trim())) {
-            newErrors.locationPlan = "Contact Address must include a valid 5-digit postcode.";
+            newErrors.locationPlan = "Location Plan must include a valid 5-digit postcode.";
         }
     
         if (!passportPhoto) {
