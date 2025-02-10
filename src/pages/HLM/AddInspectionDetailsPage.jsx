@@ -70,7 +70,7 @@ export default function AddInspectionDetailsPage() {
             setIsSubmitting(false);
             return; // Stop submission if there are errors
         }
-
+x
         try {
             const inspectionPhotoUrl = await uploadInspectionPhoto();
             await uploadSiteInspectionDetails(inspectionPhotoUrl);
