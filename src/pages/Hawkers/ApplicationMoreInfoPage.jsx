@@ -52,11 +52,10 @@ export default function ApplicationMoreInfoPage() {
             <NavigationBar />
             <section className="p-10">
                 <div className="mb-5 text-[12px]">
-                    <a href={`/hawker/application-submissions-status/${licenseApplicationID}`} className="text-blue-600 hover:underline">Application Submission Status</a>
+                    <a href={`/hawker/application-submissions-status`} className="text-blue-600 hover:underline">Application Submission Status</a>
                     <span className="text-blue-600"> {">"} </span>
-                    <a href="" className="text-blue-600 hover:underline">More Info</a>
+                    <a href={`/hawker/application-submissions-status/${licenseApplicationID}`} className="text-blue-600 hover:underline">More Info</a>
                 </div>
-
 
                 {application && application?.isRenew && (
                     <div>
