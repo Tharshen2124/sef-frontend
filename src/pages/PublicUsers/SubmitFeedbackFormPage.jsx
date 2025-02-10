@@ -3,6 +3,7 @@ import { BlueFileInput } from "../../components/General/BlueFileInput";
 import NavigationBar from "../../components/PublicUsers/NavigationBar";
 import { supabase } from "../../utils/supabaseClient";
 import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function SubmitFeedbackFormPage() {
     const [feedbackTitle, setFeedbackTitle] = useState();
@@ -10,19 +11,19 @@ export default function SubmitFeedbackFormPage() {
     const [hawkerName, setHawkerName] = useState();
     const [hawkerRating, setHawkerRating] = useState();
     const [image, setImage] = useState();
-    const { id, userType } = useAuthStore(); 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
-  
+    const { id, userType } = useAuthStore();
+    const navigate = useNavigate();
+    
     useEffect(() => {
-        if (userType !== 'publicuser') {
-            setShouldRedirect(true);
+        if (id && id !== "0" && userType === 'publicuser') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only public users are allowed to view this page.");
+            navigate('/');
         }
-    }, [id, userType]);  
-  
-    if (shouldRedirect) {
-        return <Navigate to="/" replace />;
-    } 
-  
+    }, [id, userType]);   
 
     const handleFileChange = (file) => setImage(file); 
     

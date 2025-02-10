@@ -71,7 +71,7 @@ export default function HLMHawkerApplicationPage() {
             <thead>
             <tr className="text-left border-b border-[#999]">
                 <th className="py-2 w-[250px]">Hawker Name</th>
-                <th className="py-2 w-[600px] sm:pl-16 md:pl-24">Contact Number</th>
+                <th className="py-2 w-[400px] sm:pl-16 md:pl-24">Contact Number</th>
                 <th className="py-2 ">Food Type</th>
                 <th className="py-2 w-[100px]"></th>
             </tr>

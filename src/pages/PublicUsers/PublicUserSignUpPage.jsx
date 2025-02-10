@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './PublicUserSignUpPage.css';
 import HawkTuahLogo from "../../assets/hawkTuahLogo.svg";
 import { supabase } from '../../utils/supabaseClient';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import useAuthStore from '../../store/useAuthStore';
 import { hashPassword } from '../../utils/hashPassword';
 
@@ -13,6 +13,14 @@ const PublicUserSignUpPage = () => {
     const [icNumber, setIcNumber] = useState("");
     const [redirect, setRedirect] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
+        
+    useEffect(() => {
+        if (!id && userType !== 'publicuser') {
+            alert("You are not authorized to view this page! Only public users are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]);  
 
     const [errors, setErrors] = useState({
         fullName: "",

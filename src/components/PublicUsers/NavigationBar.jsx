@@ -1,6 +1,21 @@
+import { useNavigate } from "react-router-dom"
 import HawkTuahLogo from "../../assets/hawkTuahLogo.svg"
+import useAuthStore from "../../store/useAuthStore"
 
 export default function NavigationBar() {
+    const { clearId, clearUserType } = useAuthStore()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        const result = confirm("Are you sure you want to logout?")
+
+        if (result) {
+            clearId()
+            clearUserType()
+            navigate('/')
+        }
+    }
+
     return (
         <nav className="h-[70px] w-full border border-b[#e0e0e0] flex items-center justify-between px-10">
             <img src={HawkTuahLogo} width="148px" alt="" />
@@ -13,7 +28,7 @@ export default function NavigationBar() {
             <div className="flex items-center gap-x-4">
                 <h2>Public User Mode</h2>
                 <b>|</b>
-                <button className="bg-yellow-300 py-2 px-8 rounded-md font-semibold">Logout</button>
+                <button onClick={handleLogout} className="bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 py-2 px-8 rounded-md font-semibold">Logout</button>
             </div>
         </nav>
     )

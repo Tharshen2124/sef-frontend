@@ -2,25 +2,26 @@ import React, { useEffect, useState } from 'react';
 import NavigationBar from '../../components/PublicUsers/NavigationBar';
 import { supabase } from '../../utils/supabaseClient';
 import useAuthStore from '../../store/useAuthStore';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function FeedbackPage() {
     const { id, userType } = useAuthStore(); 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
     const publicUserId = "3";
     const [feedbackItems, setFeedbackItems] = useState(null); // Stores feedback data
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
-
+    const navigate = useNavigate()
+    
     useEffect(() => {
-        if (userType !== 'publicuser') {
-            setShouldRedirect(true);
+        if (id && id !== "0" && userType === 'publicuser') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only public users are allowed to view this page.");
+            navigate('/');
         }
     }, [id, userType]);  
-  
-    if (shouldRedirect) {
-        return <Navigate to="/" replace />;
-    } 
 
     useEffect(() => {
         async function getData() {

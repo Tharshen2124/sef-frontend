@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NavigationBar from '../../components/PublicUsers/NavigationBar';
 import { Clock, MapPin, Phone, Store, User, Utensils } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../utils/supabaseClient';
 import useAuthStore from '../../store/useAuthStore';
 import { getOperationHours } from '../../utils/getOperationHours';
@@ -12,22 +12,19 @@ export default function HawkerMoreInfoPage() {
     const [error, setError] = useState(null); // Error state
     const { hawkerID } = useParams();
     const { id, userType } = useAuthStore(); 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const navigate = useNavigate()
 
     useEffect(() => {
-        if (userType !== 'publicuser') {
-            setShouldRedirect(true);
+        if (id && id !== "0" && userType === 'publicuser') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only public users are allowed to view this page.");
+            navigate('/');
         }
-
-        // setAverageRating(rating);
-    }, [id, userType, info]);  
+    }, [id, userType]);    
   
-    if (shouldRedirect) {
-        return <Navigate to="/" replace />;
-    } 
-  
-    console.log(hawkerID);
-
     useEffect(() => {
         async function getData() {
             try {

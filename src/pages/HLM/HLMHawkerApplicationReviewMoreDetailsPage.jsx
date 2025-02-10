@@ -91,7 +91,7 @@ export default function HLMHawkerApplicationReviewMoreDetailsPage() {
                     <div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Type of Application:</label>
-                            <p className="text-[#555]">Initial application</p>
+                            <p className="text-[#555]">{application && application.isRenew ? "License Renewal" : "License Approval" } </p>
                         </div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Bank Account Number:</label>

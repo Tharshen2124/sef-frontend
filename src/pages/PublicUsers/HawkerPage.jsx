@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import HawkerCard from '../../components/PublicUsers/HawkerCard';
 import NavigationBar from '../../components/PublicUsers/NavigationBar';
 import useAuthStore from '../../store/useAuthStore';
 import { supabase } from '../../utils/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 export default function HawkerPage() {
     const { id, userType } = useAuthStore(); 
-    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const navigate = useNavigate();
     const [hawkers, setHawkers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState(""); // 🔹 New state for search input
 
     useEffect(() => {
-        if (userType !== 'publicuser') {
-            setShouldRedirect(true);
+        if (id && id !== "0" && userType === 'publicuser') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only public users are allowed to view this page.");
+            navigate('/');
         }
-    }, [id, userType]);  
+    }, [id, userType]);      
 
     useEffect(() => {
         async function getData() {
@@ -40,10 +45,6 @@ export default function HawkerPage() {
 
         getData();
     }, []);
-
-    if (shouldRedirect) {
-        return <Navigate to="/" replace />;
-    }
 
     // 🔹 Filter hawkers based on the search term (business name)
     const filteredHawkers = hawkers.filter(hawker =>
