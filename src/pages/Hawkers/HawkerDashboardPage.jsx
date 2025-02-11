@@ -42,7 +42,7 @@ export default function HawkerDashboardPage() {
                     <img src={License} alt="" className="mx-auto"/>
                     <h2 className="text-blue-600 font-semibold text-lg text-center mt-10">Apply License</h2>
                 </a>
-                <a href="/hawker/view-penalty" className="w-[340px] border border-blue-200 px-6 py-[50px] rounded-lg hover:border-blue-600 hover:outline hover:outline-blue-600 transition">
+                <a href="/hawker/view-penalty" className="w-[340px] border border-blue-200 px-16 py-[50px] rounded-lg hover:border-blue-600 hover:outline hover:outline-blue-600 transition">
                     <img src={Penalties} alt="" className="mx-auto"/>
                     <h2 className="text-blue-600 font-semibold text-lg text-center mt-10">Penalties</h2>
                 </a>
