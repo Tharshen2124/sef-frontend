@@ -116,35 +116,35 @@ export default function HLMHawkerMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Account Number:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankAccountNumber }</p>
+                        <p className="text-[#555]">{ user  && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankAccountNumber }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Name:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankName }</p>
+                        <p className="text-[#555]">{ user  && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankName }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Holder Name:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankHolderName }</p>
+                        <p className="text-[#555]">{ user  && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankHolderName }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Employment Status:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].employmentStatus }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].employmentStatus }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Household Income:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0]  && user.HawkerFinanceDetails[0].householdIncome }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Type:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user  && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].householdIncome }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Start Time:</label>
-                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessStartTime) }</p>
+                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessStartTime) || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Contact Number:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user  && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].householdIncome }</p>
                     </div>
                 </div>
                 <div>
@@ -178,11 +178,11 @@ export default function HLMHawkerMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Experience:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].businessExperience }</p>
+                        <p className="text-[#555]">{ user  && user.BusinessInfo[0] && user.BusinessInfo[0].businessExperience }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Food Type:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].foodType }</p>
+                        <p className="text-[#555]">{ user && user.BusinessInfo[0] && user.BusinessInfo[0].foodType }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business End Time:</label>
@@ -206,3 +206,4 @@ export default function HLMHawkerMoreDetailsPage() {
     </>
   )
 }
+
