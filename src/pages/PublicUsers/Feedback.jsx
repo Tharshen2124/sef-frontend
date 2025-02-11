@@ -29,13 +29,16 @@ export default function FeedbackPage() {
                 const { data, error } = await supabase
                     .from('Feedback')
                     .select(`
-                        *, 
-                        Hawker (
-                            *,
-                            User (*)
+                        *,
+                        Hawker:hawkerID (
+                        *,
+                        User:userID (*),
+                        BusinessInfo ( * )  
                         )
                     `)
                     .eq('publicUserID', id);
+
+                    console.log(data)
 
                 if (error) {
                     throw new Error(error.message); // Throw error for easier handling
@@ -68,7 +71,7 @@ export default function FeedbackPage() {
                 {/* Show error message */}
                 {error && (
                     <p className="text-center text-red-600">
-                        Error fetching feedback: {error}
+                        Uh oh! A problem occured.
                     </p>
                 )}
 
@@ -83,10 +86,10 @@ export default function FeedbackPage() {
                         <thead>
                             <tr className="text-left border-b border-[#999]">
                                 <th className="py-2 w-[250px]">Title</th>
-                                <th className="py-2 w-[600px] sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
-                                    Description
+                                <th className="py-2 w-[350px] sm:pl-16 md:pl-24 ">
+                                    Hawker Rating
                                 </th>
-                                <th className="py-2 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
+                                <th className="py-2 lg:pl-16">
                                     Hawker Name
                                 </th>
                                 <th className="py-2 w-[100px]"></th>
@@ -96,11 +99,11 @@ export default function FeedbackPage() {
                             {feedbackItems.map((item, index) => (
                                 <tr key={index} className="border-b border-gray-200">
                                     <td className="py-4">{item.feedbackTitle}</td>
-                                    <td className="py-6 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-48">
-                                        {item.feedbackDescription}
+                                    <td className="py-6 sm:pl-16 md:pl-24">
+                                        {item.hawkerRating}
                                     </td>
-                                    <td className="py-4 sm:pl-16 md:pl-24 xl:pl-48">
-                                        {item.Hawker?.User?.fullName || 'Unknown Hawker'}
+                                    <td className="py-4 lg:pl-16">
+                                        {item.Hawker?.BusinessInfo[0]?.businessName || 'Unknown Hawker'}
                                     </td>
                                     <td className="py-4">
                                         <a

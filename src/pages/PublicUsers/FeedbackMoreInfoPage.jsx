@@ -26,21 +26,23 @@ export default function FeedbackMoreInfoPage() {
             const { data, error } = await supabase
                 .from('Feedback')
                 .select(`
-                    *, 
-                    Hawker(
-                        *,
-                        User(*)
-                    ) 
+                *, 
+                Hawker (
+                    *,
+                    User (*),
+                    BusinessInfo (*)
+                ) 
                 `)
-                .eq('feedbackID', feedbackID); // Assuming feedbackID matches the column name
-
+                .eq('feedbackID', feedbackID) // Fetch a specific feedback entry
+                .single(); // Ensures the result is a single object instead of an array
+          
             if (error) {
                 console.error('Error fetching feedback:', error);
-            } else if (data && data.length > 0) {
-                setInfo(data[0]); // Assuming you're only fetching one feedback
+            } else if (data) { // No need to check for `data.length`
+                setInfo(data); // `data` is already a single object
                 console.log('Feedback with hawker data:', data);
             } else {
-                console.warn('No feedback found for the given ID');
+                console.log("No data found");
                 setInfo(null); // Set null explicitly if no data is found
             }
         }
@@ -62,7 +64,7 @@ export default function FeedbackMoreInfoPage() {
                 {info ? (
                     <div className="border border-[#e0e0e0] flex flex-col mx-auto w-[550px] px-12 py-10 rounded-lg">
                         <h1 className="text-2xl font-bold text-center">Feedback to</h1>
-                        <h3 className="text-[#555] font-semibold text-center">{info.Hawker?.User.fullName || "Unknown Hawker"}</h3>
+                        <h3 className="text-[#555] font-semibold text-center">{info.Hawker?.BusinessInfo[0].businessName || "Unknown Hawker"}</h3>
                         
                         <div className="mt-8">
                             <h4 className="font-semibold">Title</h4>
