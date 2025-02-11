@@ -113,7 +113,7 @@ export default function ManageUserAccountPage() {
     <>
         <AdminNavigationBar />
           <section className="p-10 mt-10">
-            <h1 className="text-2xl font-bold mb-3">Hawker License Application</h1>
+            <h1 className="text-2xl font-bold mb-3">Manage User Accounts</h1>
             {users && users.length !== 0 && (
               <div className="w-full mx-auto border rounded-lg border-[#e0e0e0] py-16 px-24">
                 <table className="w-full">
