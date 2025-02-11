@@ -111,7 +111,7 @@ export default function HLMHawkerApplicationReviewMoreDetailsPage() {
                         </div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Household Income:</label>
-                            <p className="text-[#555]">{application && application.Hawker.HawkerFinanceDetails[0].householdIncome}n</p>
+                            <p className="text-[#555]">RM {application && application.Hawker.HawkerFinanceDetails[0].householdIncome}</p>
                         </div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Owner Name:</label>

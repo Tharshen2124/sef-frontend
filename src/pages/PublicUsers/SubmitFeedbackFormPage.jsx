@@ -100,38 +100,57 @@ export default function SubmitFeedbackFormPage() {
     }
 
     function validateForm() {
-
         let newErrors = {
             feedbackTitle: "",
             feedbackDescription: "",
             hawkerRating: "",
             image: ""
-        }
+        };
     
+        // Allow only letters, numbers, spaces, commas, periods, exclamation marks, and question marks
+
+        // Regex to allow only letters, numbers, spaces, commas, periods, exclamation marks, and question marks
+        const specialChars = /[^a-zA-Z0-9 ,.!?]/;
+        // Regex to check if there is at least one letter (A-Z or a-z)
+        const hasLetter = /[a-zA-Z]/;   
+
         if (!feedbackTitle) {
-            newErrors.feedbackTitle = "Feedback title is required."
+            newErrors.feedbackTitle = "Feedback title is required.";
+        } else if (specialChars.test(feedbackTitle)) {
+            newErrors.feedbackTitle = "Feedback title cannot contain special characters except for , . ! ? and space.";
+        } else if (!hasLetter.test(feedbackTitle)) {
+            newErrors.feedbackTitle = "Feedback title must contain at least one letter.";
+        } else if (feedbackTitle.length <= 10) {
+            newErrors.feedbackTitle = "Feedback title must be more than 10 characters.";
         }
     
         if (!feedbackDescription) {
-            newErrors.feedbackDescription = "Feedback description is required."
+            newErrors.feedbackDescription = "Feedback description is required.";
+        } else if (specialChars.test(feedbackDescription)) {
+            newErrors.feedbackDescription = "Feedback description cannot contain special characters except for , . ! ? and space.";
+        } else if (!hasLetter.test(feedbackDescription)) {
+            newErrors.feedbackDescription = "Feedback description must contain at least one letter.";
+        } else if (feedbackDescription.length <= 10) {
+            newErrors.feedbackDescription = "Feedback description must be more than 10 characters.";
         }
     
         if (!hawkerRating) {
-            newErrors.hawkerRating = "Hawker rating is required."
+            newErrors.hawkerRating = "Hawker rating is required and must be a number.";
+        } else if (isNaN(hawkerRating)) {
+            newErrors.hawkerRating = "Hawker rating must be a number.";
         } else if (hawkerRating < 0 || hawkerRating > 5) {
             newErrors.hawkerRating = "Hawker rating must be between 0 and 5.";
-        } else if (!Number.isInteger(Number(hawkerRating))) {
-            newErrors.hawkerRating = "Hawker rating must be a whole number.";
         }
     
         if (image && image.type !== "image/jpeg" && image.type !== "image/png") {
             newErrors.image = "Image must be in JPEG or PNG format.";
         }
     
-        return newErrors
+        return newErrors;
     }
+    
 
-  return (
+    return (
     <>
         <NavigationBar />
         <section className="p-10">
@@ -169,7 +188,7 @@ export default function SubmitFeedbackFormPage() {
                 </div>
 
                 <button 
-                    className="bg-blue-600 py-3 text-white mt-8 rounded-md" 
+                    className="bg-blue-600 py-3 text-white mt-8 rounded-md hover:bg-blue-700 active:bg-blue-800" 
                     onClick={handleSubmitPart1}
                 >
                         Submit

@@ -98,9 +98,10 @@ export default function HawkerSignUpPage() {
             newErrors.fullName = "Full name is required.";
         } else if (fullName.length < 3) {
             newErrors.fullName = "Full name must be at least 3 characters long.";
-        } else if (!/^[A-Za-z\s]+$/.test(fullName)) {
-            newErrors.fullName = "Full name can only contain letters and spaces.";
+        } else if (!/^[A-Za-z\s\/]+$/.test(fullName)) {
+            newErrors.fullName = "Full name can only contain letters, spaces, and slashes (/).";
         }
+
 
         // IC Number validation
         if (!icNumber) {

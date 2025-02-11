@@ -131,10 +131,12 @@ const HLMIssuePenaltyPage = () => {
   }
 
   async function uploadDocument() {
+    const uniqueName = `${Date.now()}_${document.name}`;
+
     const { data: uploadData, error: uploadError } = await supabase
       .storage
       .from('PenaltyDocument')
-      .upload(document.name, document, {
+      .upload(uniqueName, document, {
           cacheControl: '3600',
           upsert: false,
       });

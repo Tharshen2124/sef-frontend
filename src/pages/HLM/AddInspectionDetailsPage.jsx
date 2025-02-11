@@ -70,7 +70,7 @@ export default function AddInspectionDetailsPage() {
             setIsSubmitting(false);
             return; // Stop submission if there are errors
         }
-x
+
         try {
             const inspectionPhotoUrl = await uploadInspectionPhoto();
             await uploadSiteInspectionDetails(inspectionPhotoUrl);
@@ -134,6 +134,8 @@ x
         // Inspection Rating validation
         if (!inspectionRating) {
             newErrors.inspectionRating = "Inspection rating is required.";
+        } else if (isNaN(inspectionRating)) {
+            newErrors.inspectionRating = "Inspection rating must be a number.";
         } else if (inspectionRating <= 0 || inspectionRating >= 6) {
             newErrors.inspectionRating = "Inspection rating must be between 1 and 5.";
         }
@@ -195,7 +197,7 @@ x
             <HawkerNavigationBar />
             <section className="p-10">
                 <div className="mb-5 text-[12px]">
-                    <a href="" className="text-blue-600 hover:underline">Dashboard</a>
+                    <a href="/hlm/dashboard" className="text-blue-600 hover:underline">Dashboard</a>
                     <span> {">"} </span>
                     <a href="" className="text-blue-600 hover:underline">Renew License</a>
                 </div>
