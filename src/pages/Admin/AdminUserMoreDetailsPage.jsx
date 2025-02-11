@@ -1,14 +1,28 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import { getOperationHours } from "../../utils/getOperationHours";
 import { formatTime } from "../../utils/time";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function AdminUserMoreDetailsPage() {
     const { hawkerID } = useParams()
     const [user, setUser] = useState()
     const [applicationType, setApplicationType] = useState("Initial application")
+    const { id, userType } = useAuthStore();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'admin') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]); 
 
     useEffect(() => {
         async function getData() {
@@ -21,6 +35,7 @@ export default function AdminUserMoreDetailsPage() {
                     BusinessInfo (*),
                     HawkerFinanceDetails (*)
                 `)
+                .eq("LicenseApplication.isAdminApproved", "Approved")
                 .eq("LicenseApplication.status", "Approved")
                 .eq("hawkerID", hawkerID)
                 .single()
@@ -45,14 +60,14 @@ export default function AdminUserMoreDetailsPage() {
     <AdminNavigationBar />
     <section className="p-10">
             <div className="mb-5 text-[12px]">
-                <a href="" className="text-blue-600 hover:underline">Inspection Reports</a>
+                <a href="/admin/manage-user-accounts" className="text-blue-600 hover:underline">Manage Accounts</a>
                 <span className="text-blue-600"> {">"} </span>
-                <a href="" className="text-blue-600 hover:underline">More Info</a>
+                <a href={`/admin/manage-user-accounts/${hawkerID}`} className="text-blue-600 hover:underline">More Info</a>
             </div>
             <div className="flex justify-between items-center">
                 <h1 className="py-2 px-4 bg-[#DEE9FC] rounded-lg">
-                    <span className="font-bold">Hawker Business Name: </span> 
-                    {user && user?.BusinessInfo[0]?.businessName}
+                    <span className="font-bold">Hawker Owner Name: </span> 
+                    {user && user?.User.fullName}
                 </h1>
             </div>  
             
@@ -66,10 +81,6 @@ export default function AdminUserMoreDetailsPage() {
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Operation Hours:</label>
                         <p className="text-[#555]">{user && getOperationHours(user.BusinessInfo[0].businessStartTime, user.BusinessInfo[0].businessEndTime)}</p>
-                    </div>
-                    <div className="mt-4">
-                        <label htmlFor="" className="font-semibold">Full Name:</label>
-                        <p className="text-[#555]">{user && user.User.fullName}</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">IC Number:</label>
@@ -103,7 +114,6 @@ export default function AdminUserMoreDetailsPage() {
             </div>
             
             {/** LICENSE APPLICATION PART */}
-
             <h2 className="text-xl font-bold mt-6">License Application Details</h2>
             <div className="mt-2 border border-[#e0e0e0] rounded-lg grid grid-cols-2 py-8 px-16">
                 <div>
@@ -113,35 +123,35 @@ export default function AdminUserMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Account Number:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankAccountNumber }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankAccountNumber || "N/A"  }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Name:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankName }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankName || "N/A"  }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Holder Name:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].bankHolderName }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].bankHolderName || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Employment Status:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].employmentStatus }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].employmentStatus || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Household Income:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].householdIncome || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Type:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].householdIncome || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Start Time:</label>
-                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessStartTime) }</p>
+                        <p className="text-[#555]">{ user && user.BusinessInfo[0] && formatTime(user.BusinessInfo[0].businessStartTime) || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Contact Number:</label>
-                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0].householdIncome }</p>
+                        <p className="text-[#555]">{ user && user.HawkerFinanceDetails[0] && user.HawkerFinanceDetails[0].householdIncome || "N/A" }</p>
                     </div>
                 </div>
                 <div>
@@ -175,15 +185,15 @@ export default function AdminUserMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business Experience:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].businessExperience }</p>
+                        <p className="text-[#555]">{ user && user.BusinessInfo[0] && user.BusinessInfo[0].businessExperience  || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Food Type:</label>
-                        <p className="text-[#555]">{ user && user.BusinessInfo[0].foodType }</p>
+                        <p className="text-[#555]">{ user && user.BusinessInfo[0] && user.BusinessInfo[0].foodType || "N/A" }</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Business End Time:</label>
-                        <p className="text-[#555]">{ user && formatTime(user.BusinessInfo[0].businessEndTime) }</p>
+                        <p className="text-[#555]">{ user && user.BusinessInfo[0] && formatTime(user.BusinessInfo[0].businessEndTime) || "N/A" }</p>
                     </div>
                 </div>
             </div>

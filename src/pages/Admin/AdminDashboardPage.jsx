@@ -1,8 +1,25 @@
 import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
 import hawkerApplication from "../../assets/hawkerApplication.svg"
 import userAccounts from "../../assets/userAccounts.svg"
+import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AdminDashboardPage() {
+    const { id, userType } = useAuthStore();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+          if (id && id !== "0" && userType === 'admin') {
+              // User is authorized; no action needed
+              return;
+          } else {
+              // User is not authorized; show alert and redirect
+              alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+              navigate('/');
+          }
+    }, [id, userType]); 
+    
   return (
     <>
         <AdminNavigationBar />

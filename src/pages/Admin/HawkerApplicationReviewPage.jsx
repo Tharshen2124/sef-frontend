@@ -2,10 +2,23 @@ import { useEffect, useState } from "react"
 import AdminNavigationBar from "../../components/Admin/AdminNavigationBar"
 import { supabase } from "../../utils/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import useAuthStore from "../../store/useAuthStore"
 
 export default function HawkerApplicationReviewPage() {
   const [applications, setApplications] = useState()
   const navigate = useNavigate()
+  const { id, userType } = useAuthStore();
+
+  useEffect(() => {
+    if (id && id !== "0" && userType === 'admin') {
+        // User is authorized; no action needed
+        return;
+    } else {
+        // User is not authorized; show alert and redirect
+        alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+        navigate('/');
+    }
+  }, [id, userType]); 
 
   useEffect(() => {
     async function getData() {
@@ -19,6 +32,7 @@ export default function HawkerApplicationReviewPage() {
           )
         `)
         .eq("isAdminApproved", "Under Review")
+        .eq("status", "Under Review")
       setApplications(data)
     }
 
@@ -62,17 +76,21 @@ export default function HawkerApplicationReviewPage() {
   }
 
   console.log(applications)
+
+  console.log(applications)
   return (
     <>
         <AdminNavigationBar />
         <section className="p-10 mt-10">
         <h1 className="text-2xl font-bold mb-3">Hawker License Application</h1>
+        { applications && applications.length !== 0 && (
         <div className="w-full mx-auto border rounded-lg border-[#e0e0e0] py-16 px-24">
-        <table className="w-full">
+       
+          <table className="w-full">
             <thead>
             <tr className="text-left border-b border-[#999]">
                 <th className="py-2 w-[250px]">Hawker Name</th>
-                <th className="py-2 w-[600px] sm:pl-16 md:pl-24">Contact Number</th>
+                <th className="py-2 w-[400px] sm:pl-16 md:pl-24">Contact Number</th>
                 <th className="py-2 ">Food Type</th>
                 <th className="py-2 w-[100px]"></th>
             </tr>
@@ -98,6 +116,12 @@ export default function HawkerApplicationReviewPage() {
             </tbody>
         </table>
         </div>
+        )}
+        
+        {applications && applications.length === 0 && (
+            <p class="text-center bg-slate-100 border-2 border-slate-500 py-2 text-slate-700 rounded-md">
+            No license applications or renewals for now. Check back later.</p>
+        )}
         </section>
         
     </>

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function EditUserDetailsPage() {
     const { hawkerID } = useParams();
@@ -9,6 +10,18 @@ export default function EditUserDetailsPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
+    const { id, userType } = useAuthStore();
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'admin') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]); 
 
     // Initial form state
     const [formData, setFormData] = useState({

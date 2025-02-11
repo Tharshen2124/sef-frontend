@@ -1,4 +1,5 @@
 export const experienceOptions = [
+    "None",
     "Less than a year",
     "1 - 2 years",
     "3 - 4 years",

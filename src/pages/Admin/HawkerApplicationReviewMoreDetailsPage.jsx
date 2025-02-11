@@ -3,11 +3,24 @@ import AdminNavigationBar from "../../components/Admin/AdminNavigationBar";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import { formatTime } from "../../utils/time";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function HawkerApplicationReviewMoreDetailsPage() {
     const { hawkerID } = useParams()
     const [application, setApplication] = useState()
     const navigate = useNavigate()
+    const { id, userType } = useAuthStore();
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'admin') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only hawkers are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]); 
 
     useEffect(() => {
         async function getData() {
@@ -72,9 +85,11 @@ export default function HawkerApplicationReviewMoreDetailsPage() {
     <AdminNavigationBar />
     <section className="p-10">
             <div className="mb-5 text-[12px]">
-                <a href="" className="text-blue-600 hover:underline">Hawker Application</a>
+                <a href={`/admin/hawker-applications`} className="text-blue-600 hover:underline">Hawker Application</a>
                 <span className="text-blue-600"> {">"} </span>
-                <a href="" className="text-blue-600 hover:underline">More Details</a>
+                { application && (
+                    <a href={`/admin/hawker-applications/${application.licenseApplicationID}`} className="text-blue-600 hover:underline">More Details</a>
+                )}
             </div>
             <div className="flex justify-between items-center">
                 <h1 className="py-2 px-4 bg-[#DEE9FC] rounded-lg">
@@ -90,7 +105,7 @@ export default function HawkerApplicationReviewMoreDetailsPage() {
                 <div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Type of Application:</label>
-                        <p className="text-[#555]">Initial application</p>
+                        <p className="text-[#555]">{application && application.isRenew ? "License Renewal" : "License Approval"}</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Bank Account Number:</label>
@@ -110,7 +125,7 @@ export default function HawkerApplicationReviewMoreDetailsPage() {
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Household Income:</label>
-                        <p className="text-[#555]">{application && application.Hawker.HawkerFinanceDetails[0].householdIncome}n</p>
+                        <p className="text-[#555]">RM {application && application.Hawker.HawkerFinanceDetails[0].householdIncome}</p>
                     </div>
                     <div className="mt-4">
                         <label htmlFor="" className="font-semibold">Owner Name:</label>
