@@ -46,12 +46,14 @@ export default function SubmitFeedbackFormPage() {
             await handleSubmitPart2(null);
             return;
         }
+        const uniqueName = `${Date.now()}_${image.name}`;
+
 
         // Upload the image to the Supabase bucket
         const { data, error } = await supabase
             .storage
             .from('ImageForEvidenceForFeedback')
-            .upload(image.name, image, {
+            .upload(uniqueName, image, {
                 cacheControl: '3600',
                 upsert: false,
             });
@@ -98,6 +100,7 @@ export default function SubmitFeedbackFormPage() {
     }
 
     function validateForm() {
+
         let newErrors = {
             feedbackTitle: "",
             feedbackDescription: "",
@@ -117,6 +120,8 @@ export default function SubmitFeedbackFormPage() {
             newErrors.hawkerRating = "Hawker rating is required."
         } else if (hawkerRating < 0 || hawkerRating > 5) {
             newErrors.hawkerRating = "Hawker rating must be between 0 and 5.";
+        } else if (!Number.isInteger(Number(hawkerRating))) {
+            newErrors.hawkerRating = "Hawker rating must be a whole number.";
         }
     
         if (image && image.type !== "image/jpeg" && image.type !== "image/png") {
@@ -154,7 +159,7 @@ export default function SubmitFeedbackFormPage() {
 
                 <div className="flex flex-col mt-4">
                     <label htmlFor="" className="font-semibold">Hawker Rating {"(Rate from 1 to 5)"}:</label>
-                    <input type="text" placeholder="5" onChange={(e) => setHawkerRating(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
+                    <input type="number" placeholder="5" onChange={(e) => setHawkerRating(e.target.value)} className="border border-[#e0e0e0] rounded-md py-2 px-4 mt-1" />
                     {errors.hawkerRating && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.hawkerRating}</p>}
                 </div>
                 <div className="flex flex-col mt-4">
@@ -163,7 +168,12 @@ export default function SubmitFeedbackFormPage() {
                     {errors.image && <p className="error-text border-2 mt-2 mb-3 py-1 px-2 rounded-[5px] border-red-500 bg-red-200 text-red-800">{errors.image}</p>}
                 </div>
 
-                <button className="bg-blue-600 py-3 text-white mt-8 rounded-md" onClick={handleSubmitPart1}>Submit</button>
+                <button 
+                    className="bg-blue-600 py-3 text-white mt-8 rounded-md" 
+                    onClick={handleSubmitPart1}
+                >
+                        Submit
+                </button>
             </div>
         </section>
     </>
