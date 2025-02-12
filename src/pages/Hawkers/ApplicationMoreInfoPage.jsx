@@ -138,7 +138,7 @@ export default function ApplicationMoreInfoPage() {
                         </div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Business Type:</label>
-                            <p className="text-[#555]">{ application?.Hawker?.HawkerFinanceDetails?.[0]?.householdIncome || "N/A" }</p>
+                            <p className="text-[#555]">{ application?.Hawker?.BusinessInfo?.[0]?.businessType || "N/A" }</p>
                         </div>
                         <div className="mt-4">
                             <label htmlFor="" className="font-semibold">Business Start Time:</label>
