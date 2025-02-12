@@ -113,9 +113,6 @@ export default function ManageHawkerAccountPage() {
         <HLMNavigationBar />
         <section className="p-10">
         <div className="mb-5 text-[12px]">
-            <a href="" className="text-blue-600 hover:underline">Manage Accounts</a>
-                <span className="text-blue-600"> {">"} </span>
-            <a href="" className="text-blue-600 hover:underline">Edit Details</a>
         </div>
         <h1 className="text-2xl font-bold mb-3">Manage Hawker Accounts</h1>
         <div className="w-full mx-auto border rounded-lg border-[#e0e0e0] py-16 px-24">

@@ -176,9 +176,9 @@ const HLMIssuePenaltyPage = () => {
       <HLMNavigationBar />
       <div>
         <div className="linktopleft">
-          <a href="" className="pathway">Inspection Reports</a>
+          <a href="/hlm/manage-hawker-accounts" className="pathway">Manage Account</a>
           <span className="pathway2"> {">"} </span>
-          <a href="" className="pathway3">Issue Penalty</a>
+          <a href={`/hlm/issue-penalty/${hawkerID}`} className="pathway3">Issue Penalty</a>
         </div>
         <form onSubmit={handleSubmit} className="issuePenaltyContainer">
           <div className="issuePenaltyForm">

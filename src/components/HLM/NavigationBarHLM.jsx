@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import HawkTuahLogo from "../../assets/hawkTuahLogo.svg"
 import useAuthStore from "../../store/useAuthStore"
 
-export default function AdminNavigationBar() {
+export default function HLMNavigationBar() {
     const { clearId, clearUserType } = useAuthStore()
     const navigate = useNavigate()
     

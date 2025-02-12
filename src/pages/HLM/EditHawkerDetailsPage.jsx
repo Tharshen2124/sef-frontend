@@ -240,9 +240,9 @@ export default function EditHawkerDetailsPage() {
             <HLMNavigationBar />
             <section className="p-10">
                 <div className="mb-5 text-[12px]">
-                    <a href="" className="text-blue-600 hover:underline">Manage Accounts</a>
+                    <a href="/hlm/manage-hawker-accounts" className="text-blue-600 hover:underline">Manage Accounts</a>
                     <span className="text-blue-600"> {">"} </span>
-                    <a href="" className="text-blue-600 hover:underline">Edit Details</a>
+                    <a href={`/hlm/hawkers/edit/${hawkerID}`} className="text-blue-600 hover:underline">Edit Details</a>
                 </div>
 
                 <form onSubmit={handleSubmit}>

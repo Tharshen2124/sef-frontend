@@ -62,9 +62,9 @@ export default function HLMHawkerMoreDetailsPage() {
     <HLMNavigationBar />
     <section className="p-10">
             <div className="mb-5 text-[12px]">
-                <a href="" className="text-blue-600 hover:underline">Inspection Reports</a>
+                <a href="/hlm/manage-hawker-accounts" className="text-blue-600 hover:underline">Manage Accounts</a>
                 <span className="text-blue-600"> {">"} </span>
-                <a href="" className="text-blue-600 hover:underline">More Info</a>
+                <a href={`/hlm/manage-hawker-accounts/${hawkerID}`} className="text-blue-600 hover:underline">More Info</a>
             </div>
             <div className="flex justify-between items-center">
                 <h1 className="py-2 px-4 bg-[#DEE9FC] rounded-lg">

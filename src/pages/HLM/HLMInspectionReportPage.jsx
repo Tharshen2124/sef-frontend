@@ -44,9 +44,6 @@ export default function HLMInspectionReportPage() {
     <HLMNavigationBar />
             <section className="p-10">
             <div className="mb-5 text-[12px]">
-                    <a href="" className="text-blue-600 hover:underline">Dashboard</a>
-                    <span> {">"} </span>
-                    <a href="" className="text-blue-600 hover:underline">Renew License</a>
                 </div>
             <div className="flex justify-between mb-5 items-center">
             <h1 className="text-2xl font-bold">Inspection Reports</h1>

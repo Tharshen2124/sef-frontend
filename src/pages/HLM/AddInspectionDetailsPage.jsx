@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { BlueFileInput } from "../../components/General/BlueFileInput";
-import HawkerNavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
+import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 
 export default function AddInspectionDetailsPage() {
     const navigate = useNavigate();
@@ -207,12 +207,12 @@ export default function AddInspectionDetailsPage() {
 
     return (
         <>
-            <HawkerNavigationBar />
+            <HLMNavigationBar />
             <section className="p-10">
                 <div className="mb-5 text-[12px]">
-                    <a href="/hlm/dashboard" className="text-blue-600 hover:underline">Dashboard</a>
+                    <a href="/hlm/inspection-reports" className="text-blue-600 hover:underline">Inspection Reports</a>
                     <span> {">"} </span>
-                    <a href="" className="text-blue-600 hover:underline">Renew License</a>
+                    <a href="/hlm/inspection-reports/add" className="text-blue-600 hover:underline">Add Inspection</a>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mx-auto w-[530px] p-4 rounded-lg">
