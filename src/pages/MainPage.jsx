@@ -69,47 +69,12 @@ export default function MainPage() {
                 <h2 className="text-3xl font-bold mb-4 text-blue-800">Ready to Get Started?</h2>
                 <p className="text-xl mb-8 text-blue-600">Join thousands of satisfied customers and transform your business today.</p>
                 <div className="flex gap-x-2 justify-center">
-                    <button className=" bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">Sign Up</button>
+                    <a href="/account-selection" className="hover:no-underline bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">Sign Up</a>
                 </div>
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="bg-blue-800 text-white py-10">
-                <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
-                    <h3 className="text-lg font-semibold mb-4">About Us</h3>
-                    <p>We are dedicated to providing innovative solutions for businesses of all sizes.</p>
-                    </div>
-                    <div>
-                    <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul className="space-y-2">
-                        <li><a href="#" className="hover:text-blue-200">Home</a></li>
-                        <li><a href="#" className="hover:text-blue-200">Features</a></li>
-                        <li><a href="#" className="hover:text-blue-200">Pricing</a></li>
-                        <li><a href="#" className="hover:text-blue-200">Contact</a></li>
-                    </ul>
-                    </div>
-                    <div>
-                    <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-                    <p>Email: info@example.com</p>
-                    <p>Phone: (123) 456-7890</p>
-                    </div>
-                    <div>
-                    <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-                    <div className="flex space-x-4">
-                        <a href="#" className="hover:text-blue-200">Facebook</a>
-                        <a href="#" className="hover:text-blue-200">Twitter</a>
-                        <a href="#" className="hover:text-blue-200">LinkedIn</a>
-                    </div>
-                    </div>
-                </div>
-                <div className="mt-8 text-center">
-                    <p>&copy; 2023 Your Company Name. All rights reserved.</p>
-                </div>
-                </div>
-            </footer>
+
         </>
     )
 }
