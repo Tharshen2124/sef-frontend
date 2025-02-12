@@ -3,6 +3,7 @@ import { BlueFileInput } from "../../components/General/BlueFileInput";
 import HawkerNavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function AddInspectionDetailsPage() {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function AddInspectionDetailsPage() {
     const [hawkers, setHawkers] = useState([]);
     const [selectedHawker, setSelectedHawker] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { id, userType } = useAuthStore();
     const [errors, setErrors] = useState({
         selectedHawker: "", 
         inspectionOutcome: "", 
@@ -23,6 +25,17 @@ export default function AddInspectionDetailsPage() {
         inspectionPhoto: "",
         form: ""
     });
+
+    useEffect(() => {
+            if (id && id !== "0" && userType === 'hlm') {
+                // User is authorized; no action needed
+                return;
+            } else {
+                // User is not authorized; show alert and redirect
+                alert("You are not authorized to view this page! Only Hawker license manager are allowed to view this page.");
+                navigate('/');
+            }
+        }, [id, userType]);
 
     const handleInspectionPhoto = (file) => setInspectionPhoto(file);
 

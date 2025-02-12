@@ -2,10 +2,23 @@ import { useNavigate } from "react-router-dom";
 import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 import { supabase } from "../../utils/supabaseClient";
 import { useEffect, useState } from "react";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function HLMHawkerApplicationPage() {
   const [applications, setApplications] = useState()
   const navigate = useNavigate()
+  const { id, userType } = useAuthStore();
+
+  useEffect(() => {
+    if (id && id !== "0" && userType === 'hlm') {
+        // User is authorized; no action needed
+        return;
+    } else {
+        // User is not authorized; show alert and redirect
+        alert("You are not authorized to view this page! Only Hawker license manager are allowed to view this page.");
+        navigate('/');
+    }
+}, [id, userType]);
 
   useEffect(() => {
     async function getData() {

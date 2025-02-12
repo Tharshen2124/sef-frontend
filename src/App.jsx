@@ -67,7 +67,7 @@ function App() {
           <Route path="/hawker/profile" element={<HawkerProfilePage />} />
           <Route path="/hawker/apply-license" element={<ApplyForLicensePage />} />
           <Route path="/hawker/view-penalty" element={<HawkerViewPenaltyPage />} />
-          <Route path="/hawker/feedback-more-info/:hawkerID/:feedbackID" element={<HawkerFeedbackMoreInfoPage />} />
+          <Route path="/hawker/feedback/:feedbackID" element={<HawkerFeedbackMoreInfoPage />} />
           <Route path="/hawker/application-submissions-status/:licenseApplicationID" element={<ApplicationMoreInfoPage />} />
 
           {/* System Admin routes */}

@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabaseClient";
 import { formatTime } from "../../utils/time";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function HLMInspectionReportMoreDetailsPage() {
     const { inspectionID } = useParams()
     const [inspectionReport, setInspectionReport] = useState()
+    const { id, userType } = useAuthStore();
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (id && id !== "0" && userType === 'hlm') {
+            // User is authorized; no action needed
+            return;
+        } else {
+            // User is not authorized; show alert and redirect
+            alert("You are not authorized to view this page! Only Hawker license manager are allowed to view this page.");
+            navigate('/');
+        }
+    }, [id, userType]);
 
     useEffect(() => {
         async function getData() {

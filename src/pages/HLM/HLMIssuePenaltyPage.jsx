@@ -5,6 +5,7 @@ import './HLMIssuePenaltyPage.css';
 import { BlueFileInput } from '../../components/General/BlueFileInput';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hawkerPenalties } from '../../utils/penaltyTypes';
+import useAuthStore from '../../store/useAuthStore';
 
 const HLMIssuePenaltyPage = () => {
   const { hawkerID } = useParams()
@@ -19,6 +20,18 @@ const HLMIssuePenaltyPage = () => {
     violationType: "",
     document: ""
   });
+  const { id, userType } = useAuthStore();
+
+  useEffect(() => {
+    if (id && id !== "0" && userType === 'hlm') {
+        // User is authorized; no action needed
+        return;
+    } else {
+        // User is not authorized; show alert and redirect
+        alert("You are not authorized to view this page! Only Hawker license manager are allowed to view this page.");
+        navigate('/');
+    }
+  }, [id, userType]);
 
   useEffect(() => {
     async function fetchHawkerDetails() {

@@ -102,7 +102,7 @@ export default function HawkerFeedbackPage() {
                   </td>
                   <td className="py-4">
                     <a
-                      href="#"
+                      href={`/hawker/feedback/${item.feedbackID}`}
                       className="text-blue-600 hover:text-blue-800 underline"
                     >
                       More Details

@@ -3,10 +3,24 @@ import HLMNavigationBar from "../../components/HLM/NavigationBarHLM";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import { formatTime } from "../../utils/time";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function HLMInspectionReportPage() {
   const [inspectionReports, setInspectionReports] = useState()
+  const { id, userType } = useAuthStore();
+  const navigate = useNavigate()
 
+  useEffect(() => {
+    if (id && id !== "0" && userType === 'hlm') {
+        // User is authorized; no action needed
+        return;
+    } else {
+        // User is not authorized; show alert and redirect
+        alert("You are not authorized to view this page! Only Hawker license manager are allowed to view this page.");
+        navigate('/');
+    }
+  }, [id, userType]);
   
   useEffect(() => {
     async function getData() {
@@ -56,7 +70,7 @@ export default function HLMInspectionReportPage() {
                 {inspectionReports && inspectionReports.map((item, index) => (
                     <tr key={index} className="border-b border-[#e0e0e0]">
                     <td className="py-4">{item.Hawker.BusinessInfo[0].businessName}</td>
-                    <td className="py-6 lg:pl-16">{item.Hawker.birthDate}</td>
+                    <td className="py-6 lg:pl-16">{item.inspectionDate}</td>
                     <td className="py-4 ">{formatTime(item.inspectionTime)}</td>
                     <td className="py-4 gap-x-4">
                         <a 

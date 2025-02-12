@@ -5,7 +5,7 @@ import NavigationBar from "../../components/Hawkers/HawkerNavigationBar";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function HawkerFeedbackMoreInfoPage() {
-    const {hawkerID, feedbackID} = useParams();
+    const {feedbackID} = useParams();
     const [feedbacks, setFeedbacks] = useState([]);
     const { id, userType } = useAuthStore();
     const navigate = useNavigate();
@@ -37,7 +37,6 @@ export default function HawkerFeedbackMoreInfoPage() {
                     User:userID ( fullName )
                     )
                 `)
-                .eq("hawkerID", hawkerID)
                 .eq("feedbackID", feedbackID) 
                 .single()
 
@@ -53,14 +52,18 @@ export default function HawkerFeedbackMoreInfoPage() {
             <NavigationBar />
             <section className="p-10">
                         <div className="mb-5 text-[12px]">
-                            <a href="/hawker/dashboard" className="text-blue-600 hover:underline">Hawker</a>
+                            <a href="/hawker/dashboard" className="text-blue-600 hover:underline">Dashboard</a>
                             <span> {">"} </span>
-                            <a href="" className="text-blue-600 hover:underline">Submit Feedback</a>
+                            <a href="/hawker/feedback" className="text-blue-600 hover:underline">Feedback</a>
+                            <span> {">"} </span>
+                            { feedbackID && (
+                                <a href={`/hawker/feedback/${feedbackID}`} className="text-blue-600 hover:underline">More Info</a>
+                            )}
                         </div>
             
                         <div className="border border-[#e0e0e0]  flex flex-col mx-auto w-[550px] px-12 py-10 rounded-lg">
                             <h1 className="text-2xl font-bold text-center">Feedback by</h1>
-                            <h3 className="text-[#555] font-semibold text-center">{feedbacks?.User?.fullName || "N/A"}</h3>
+                            <h3 className="text-[#555] font-semibold text-center">{feedbacks?.PublicUser?.User?.fullName || "N/A"}</h3>
                             
                             <div className="mt-8">
                                 <h4 className="font-semibold">Title</h4>
@@ -80,10 +83,14 @@ export default function HawkerFeedbackMoreInfoPage() {
                             <div className="mt-4">
                                 <h4 className="font-semibold">Image For Supporting Evidence </h4>
                                 {feedbacks?.imageForSupportingEvidence? (
-                                                                    <img
-                                                                        src={feedbacks.imageForSupportingEvidence}
-                                                                        alt="Supporting Evidence"
-                                                                            />) :<p className="text-[14px] font-semibold text-blue-600 underline">("N/A")</p>}
+                                    <p className="font-semibold text-blue-600 underline">
+                                        <a target="_blank" href={feedbacks.imageForSupportingEvidence} rel="noopener noreferrer">Photo link</a>
+                                    </p>
+                                ) : (
+                                    <p className="text-[14px] font-semibold">
+                                        No image provided
+                                    </p>
+                                )}
                             </div>
     
                             <div className="mt-4">
