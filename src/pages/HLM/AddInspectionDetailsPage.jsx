@@ -89,7 +89,7 @@ export default function AddInspectionDetailsPage() {
             await uploadSiteInspectionDetails(inspectionPhotoUrl);
            
             alert("Successfully added inspection details.");
-            navigate("/hlm/dashboard")
+            navigate("/hlm/inspection-reports")
         } catch (error) {
             setIsSubmitting(false);
             console.error("Error occurred", error);
