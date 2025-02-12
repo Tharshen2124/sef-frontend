@@ -148,7 +148,7 @@ export default function LoginPage() {
         alert("Successfully logged in as hawker license manager!");
         setId(user.hawkerLicenseManagerID);
         setUserType("hlm");
-        navigate("/license-manager/dashboard");
+        navigate("/hlm/dashboard");
         break;
       default:
         setErrors({ form: "User type not found. Please contact support." });
