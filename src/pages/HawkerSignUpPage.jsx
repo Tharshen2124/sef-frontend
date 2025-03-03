@@ -155,6 +155,7 @@ export default function HawkerSignUpPage() {
             minAllowedDate.setFullYear(today.getFullYear() - 18);
     
             if (birthDateObj > minAllowedDate) {
+                console.log("hello");
                 newErrors.birthDate = "You must be 18 years and above to register as a hawker.";
             }
         }    
